@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "football-recruitment-explorer"
+version = "0.1.0"
+description = "StatsBomb event-data recruitment analytics portfolio project"
+requires-python = ">=3.11"
+dependencies = [
+    "statsbombpy",
+    "pandas",
+    "numpy",
+    "scipy",
+    "scikit-learn",
+    "pyarrow",
+    "matplotlib",
+    "plotly",
+    "streamlit",
+    "mplsoccer",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "jupyterlab"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+

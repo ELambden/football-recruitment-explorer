@@ -1,0 +1,4 @@
+country_name,competition_name,season_name,competition_id,season_id,match_count,unique_match_ids,team_count
+France,Ligue 1,2015/2016,7,27,377,377,20
+England,Premier League,2015/2016,2,27,380,380,20
+Italy,Serie A,2015/2016,12,27,380,380,20

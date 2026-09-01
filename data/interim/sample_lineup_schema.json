@@ -1,0 +1,26 @@
+{
+  "container_type": "dict",
+  "first_player_keys": [
+    "cards",
+    "country",
+    "jersey_number",
+    "player_id",
+    "player_name",
+    "player_nickname",
+    "positions"
+  ],
+  "first_position_keys": [
+    "end_reason",
+    "from",
+    "from_period",
+    "position",
+    "position_id",
+    "start_reason",
+    "to",
+    "to_period"
+  ],
+  "sample_match_id": 3901259,
+  "teams": [
+    "Troyes"
+  ]
+}
