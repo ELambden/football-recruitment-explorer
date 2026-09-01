@@ -57,6 +57,20 @@ Record the verified match counts here after running the audit:
 
 1. Data audit: verify competition coverage, event schema, lineup schema, and sample coordinate validity.
 2. Player-match table: calculate exact minutes, dominant position group, and compact event counts.
+
+```bash
+python scripts/build_player_match_features.py
+```
+
+This writes `data/processed/player_match_features.parquet` and uses an ignored per-match cache in `data/interim/player_match_by_match/` so interrupted runs can resume.
+
+Current verified output:
+
+| Artifact | Rows | Matches | Players | Competitions |
+| --- | ---: | ---: | ---: | ---: |
+| `data/processed/player_match_features.parquet` | 31,546 | 1,137 | 1,653 | 3 |
+
+The player-match table currently includes exact lineup minutes, dominant position group, shot volume, non-penalty xG, pass completion counts, pressured passing, box receipts, carries into the box, progressive carry distance, dribbles, pressures, counterpressures, miscontrols, dispossessions, and xG assisted.
 3. Player profiles: aggregate centre-forward player-seasons with per-90 and opportunity-adjusted metrics.
 4. Similarity model: robust scaling, feature-group weights, and benchmark-player rankings.
 5. Validation: split-half reliability, match bootstrap rank intervals, and weight sensitivity.

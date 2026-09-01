@@ -12,3 +12,5 @@ venv/
 data/raw/*
 !data/raw/.gitkeep
 
+
+data/interim/player_match_by_match/
