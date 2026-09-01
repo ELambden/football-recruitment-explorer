@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Football Recruitment Explorer</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=2026-09-02-all-position-v3" />
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   </head>
   <body>
@@ -37,11 +37,6 @@
 
           <label for="searchFilter">Player search</label>
           <input id="searchFilter" type="search" placeholder="Search player" autocomplete="off" />
-
-          <label class="check-row" for="kaneOnlyFilter">
-            <input id="kaneOnlyFilter" type="checkbox" />
-            <span>Kane similarity cohort only</span>
-          </label>
         </section>
 
         <section class="control-section">
@@ -54,7 +49,7 @@
           <select id="playerSelect3" class="player-select"></select>
           <label for="playerSelect4">Player 4</label>
           <select id="playerSelect4" class="player-select"></select>
-          <button id="resetPlayers" type="button">Reset to Kane shortlist</button>
+          <button id="resetPlayers" type="button">Reset players</button>
         </section>
 
         <section class="control-section">
@@ -110,7 +105,7 @@
           <div class="panel-header table-header">
             <div>
               <h2>Candidate Table</h2>
-              <p>Filtered player profiles with Kane similarity rank where available.</p>
+              <p>Filtered player profiles with sortable raw metrics.</p>
             </div>
             <div id="tableCount" class="table-count">0 rows</div>
           </div>
@@ -125,7 +120,7 @@
         <section class="method-band">
           <h2>Methodology Notes</h2>
           <p>
-            Profiles are precomputed from StatsBomb Open Data. Radar values are role-aware percentiles, so a centre-forward and goalkeeper can both be displayed, but each is benchmarked against his own dominant position group. The Kane similarity rank is only calculated for the 47-player centre-forward cohort with 900+ minutes and 60%+ centre-forward minutes.
+            Profiles are precomputed from StatsBomb Open Data. Radar values are role-aware percentiles, so players from different roles can be displayed together while each is benchmarked against his own dominant position group. Raw table values should still be interpreted with role context, because event opportunities vary heavily by position and team style.
           </p>
         </section>
       </main>
@@ -134,7 +129,8 @@
     <script>
       window.DASHBOARD_DATA_PATH = "data/site-data.json";
       window.DASHBOARD_METRICS_PATH = "data/metrics.json";
+      window.DASHBOARD_ASSET_VERSION = "2026-09-02-all-position-v3";
     </script>
-    <script src="app.js"></script>
+    <script src="app.js?v=2026-09-02-all-position-v3"></script>
   </body>
 </html>

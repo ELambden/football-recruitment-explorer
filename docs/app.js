@@ -5,8 +5,8 @@ const state = {
   rolePresets: {},
   selectedMetricIds: [],
   selectedPlayerIds: [],
-  sortKey: "similarityRank",
-  sortDirection: "asc",
+  sortKey: "minutes",
+  sortDirection: "desc",
 };
 
 const els = {
@@ -16,7 +16,6 @@ const els = {
   minutesFilter: document.getElementById("minutesFilter"),
   minutesValue: document.getElementById("minutesValue"),
   searchFilter: document.getElementById("searchFilter"),
-  kaneOnlyFilter: document.getElementById("kaneOnlyFilter"),
   metricCheckboxes: document.getElementById("metricCheckboxes"),
   playerSelects: Array.from(document.querySelectorAll(".player-select")),
   resetPlayers: document.getElementById("resetPlayers"),
@@ -70,14 +69,12 @@ function getFilteredPlayers() {
   const team = els.teamFilter.value;
   const minMinutes = Number(els.minutesFilter.value);
   const search = els.searchFilter.value.trim().toLowerCase();
-  const kaneOnly = els.kaneOnlyFilter.checked;
 
   return state.players.filter((player) => {
     if (position !== "All" && player.positionGroup !== position) return false;
     if (competition !== "All" && player.competitionName !== competition) return false;
     if (team !== "All" && player.teamName !== team) return false;
     if (player.minutes < minMinutes) return false;
-    if (kaneOnly && !player.isKaneSimilarityCandidate) return false;
     if (search && !player.playerName.toLowerCase().includes(search)) return false;
     return true;
   });
@@ -144,16 +141,11 @@ function selectedPlayers() {
 }
 
 function pickDefaultPlayers(filteredPlayers) {
-  const byId = new Map(filteredPlayers.map((player) => [player.playerId, player]));
-  const picked = [];
-  for (const id of [10955, 3018, 20521, 4269]) {
-    if (byId.has(id)) picked.push(playerKey(byId.get(id)));
-  }
-  for (const player of filteredPlayers) {
-    if (picked.length >= 4) break;
-    const key = playerKey(player);
-    if (!picked.includes(key)) picked.push(key);
-  }
+  const picked = filteredPlayers
+    .slice()
+    .sort((a, b) => b.minutes - a.minutes)
+    .slice(0, 4)
+    .map(playerKey);
   state.selectedPlayerIds = picked;
 }
 
@@ -268,44 +260,57 @@ function renderBar() {
   }, { responsive: true, displayModeBar: false });
 }
 
-function numericSortValue(value) {
-  if (value === null || value === undefined || value === "") return Number.POSITIVE_INFINITY;
-  return Number(value);
+function sortableNumber(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const number = Number(value);
+  return Number.isNaN(number) ? null : number;
+}
+
+function compareNullable(left, right, comparator) {
+  const leftMissing = left === null || left === undefined || left === "";
+  const rightMissing = right === null || right === undefined || right === "";
+  if (leftMissing && rightMissing) return 0;
+  if (leftMissing) return 1;
+  if (rightMissing) return -1;
+
+  const result = comparator(left, right);
+  return state.sortDirection === "asc" ? result : -result;
 }
 
 function sortPlayers(players) {
   const key = state.sortKey;
   return players.slice().sort((a, b) => {
-    let left;
-    let right;
     if (key.startsWith("metric:")) {
       const metricId = key.replace("metric:", "");
-      left = numericSortValue(a.metrics[metricId]);
-      right = numericSortValue(b.metrics[metricId]);
-    } else if (["minutes", "matches", "similarityRank", "similarityPercentile"].includes(key)) {
-      left = numericSortValue(a[key]);
-      right = numericSortValue(b[key]);
-    } else {
-      left = String(a[key] || "");
-      right = String(b[key] || "");
+      return compareNullable(
+        sortableNumber(a.metrics[metricId]),
+        sortableNumber(b.metrics[metricId]),
+        (left, right) => left - right
+      );
     }
 
-    let result = 0;
-    if (typeof left === "number" && typeof right === "number") result = left - right;
-    else result = left.localeCompare(right);
-    return state.sortDirection === "asc" ? result : -result;
+    if (["minutes", "matches", "starts", "positionShare"].includes(key)) {
+      return compareNullable(sortableNumber(a[key]), sortableNumber(b[key]), (left, right) => left - right);
+    }
+
+    return compareNullable(
+      a[key],
+      b[key],
+      (left, right) => String(left).localeCompare(String(right))
+    );
   });
 }
 
 function renderTable(filteredPlayers) {
-  const selectedMetricIds = state.selectedMetricIds.slice(0, 6);
+  const selectedMetricIds = state.selectedMetricIds;
   const columns = [
     { key: "playerName", label: "Player" },
     { key: "teamName", label: "Team" },
     { key: "competitionName", label: "Competition" },
     { key: "positionGroup", label: "Role" },
     { key: "minutes", label: "Minutes", numeric: true, format: ".0f" },
-    { key: "similarityRank", label: "Kane rank", numeric: true, format: ".0f" },
+    { key: "matches", label: "Matches", numeric: true, format: ".0f" },
+    { key: "starts", label: "Starts", numeric: true, format: ".0f" },
     ...selectedMetricIds.map((metricId) => {
       const metric = state.metricById.get(metricId);
       return { key: `metric:${metricId}`, label: metric.shortLabel || metric.label, numeric: true, format: metric.format };
@@ -320,8 +325,10 @@ function renderTable(filteredPlayers) {
   const headerRow = document.createElement("tr");
   for (const column of columns) {
     const th = document.createElement("th");
-    th.textContent = column.label;
-    if (column.numeric) th.className = "numeric";
+    const isSorted = state.sortKey === column.key;
+    th.textContent = `${column.label}${isSorted ? (state.sortDirection === "asc" ? " ↑" : " ↓") : ""}`;
+    th.title = "Click to sort by this column";
+    th.className = `${column.numeric ? "numeric" : ""}${isSorted ? " sorted" : ""}`.trim();
     th.addEventListener("click", () => {
       if (state.sortKey === column.key) {
         state.sortDirection = state.sortDirection === "asc" ? "desc" : "asc";
@@ -352,7 +359,9 @@ function renderTable(filteredPlayers) {
     }
     tbody.appendChild(tr);
   }
-  els.tableCount.textContent = `${filteredPlayers.length} rows`;
+  els.tableCount.textContent = rows.length === filteredPlayers.length
+    ? `${filteredPlayers.length} rows`
+    : `showing ${rows.length} of ${filteredPlayers.length} rows`;
 }
 
 function renderDashboard() {
@@ -374,10 +383,16 @@ function handleFilterChange({ resetMetrics = false } = {}) {
   renderDashboard();
 }
 
+function versionedPath(path) {
+  const version = window.DASHBOARD_ASSET_VERSION || "dev";
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}v=${encodeURIComponent(version)}`;
+}
+
 async function init() {
   const [siteData, metricsData] = await Promise.all([
-    fetch(window.DASHBOARD_DATA_PATH).then((response) => response.json()),
-    fetch(window.DASHBOARD_METRICS_PATH).then((response) => response.json()),
+    fetch(versionedPath(window.DASHBOARD_DATA_PATH)).then((response) => response.json()),
+    fetch(versionedPath(window.DASHBOARD_METRICS_PATH)).then((response) => response.json()),
   ]);
 
   state.players = siteData.players;
@@ -389,20 +404,17 @@ async function init() {
   setOptions(els.positionFilter, siteData.scope.positionGroups, { selected: metricsData.defaultRole });
   setOptions(els.competitionFilter, siteData.scope.competitions);
   setOptions(els.teamFilter, uniqueSorted(state.players.map((player) => player.teamName)));
-  els.kaneOnlyFilter.checked = true;
 
   renderMetricCheckboxes();
   renderDashboard();
 
   els.positionFilter.addEventListener("change", () => {
-    els.kaneOnlyFilter.checked = els.positionFilter.value === "Centre Forward";
     handleFilterChange({ resetMetrics: true });
   });
   els.competitionFilter.addEventListener("change", () => handleFilterChange());
   els.teamFilter.addEventListener("change", () => handleFilterChange());
   els.minutesFilter.addEventListener("input", () => handleFilterChange());
   els.searchFilter.addEventListener("input", () => handleFilterChange());
-  els.kaneOnlyFilter.addEventListener("change", () => handleFilterChange());
   els.playerSelects.forEach((select) => {
     select.addEventListener("change", () => {
       updateSelectedPlayersFromControls();
@@ -410,9 +422,6 @@ async function init() {
     });
   });
   els.resetPlayers.addEventListener("click", () => {
-    els.positionFilter.value = "Centre Forward";
-    els.minutesFilter.value = 900;
-    els.kaneOnlyFilter.checked = true;
     selectPresetMetrics();
     renderMetricCheckboxes();
     state.selectedPlayerIds = [];

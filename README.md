@@ -2,11 +2,7 @@
 
 Portfolio project for building football-data experience with StatsBomb open event data.
 
-The first case study is a historical recruitment-methodology demo:
-
-> Which centre-forwards in selected 2015/16 StatsBomb open-data competitions most closely reproduce the event-derived profile of a benchmark player?
-
-The intended first benchmark is Harry Kane in the 2015/16 Premier League. This is not a 2026 transfer recommendation model. It is a reproducible demonstration of event-data ingestion, player-match feature engineering, similarity modelling, validation, and interactive dashboard presentation.
+The current dashboard is a historical recruitment-methodology demo for exploring 2015/16 player profiles across selected StatsBomb open-data competitions. It is not a 2026 transfer recommendation model; it is a reproducible demonstration of event-data ingestion, player-match feature engineering, role-aware profile metrics, validation, and interactive dashboard presentation.
 
 ## Data Source
 
@@ -72,7 +68,7 @@ Current verified output:
 
 The player-match table currently includes exact lineup minutes, dominant position group, shot volume, non-penalty xG, pass completion counts, pressured passing, box receipts, carries into the box, progressive carry distance, dribbles, pressures, counterpressures, defensive actions, aerials, long passing, crossing, progression into the final third, goalkeeper actions, discipline events, miscontrols, dispossessions, and xG assisted.
 
-3. Player profiles: aggregate centre-forward player-seasons with per-90 and opportunity-adjusted metrics.
+3. Player profiles: aggregate player-seasons with per-90 and opportunity-adjusted metrics.
 
 ```bash
 python scripts/build_player_profiles.py
@@ -117,7 +113,7 @@ Top five baseline profile alternatives: Giovanni-Guy Yann Sio, Bafetimbi Gomis, 
 
 The repository includes a static GitHub Pages dashboard in `docs/`. It loads precomputed JSON generated from the Python pipeline, so it can run on GitHub Pages without a Python server.
 
-Regenerate the dashboard data after rebuilding profiles or similarity rankings:
+Regenerate the dashboard data after rebuilding profiles:
 
 ```bash
 python scripts/export_static_site_data.py
@@ -147,7 +143,7 @@ Dashboard features:
 - 2-4 player comparison
 - spider chart using position-group percentiles
 - raw metric comparison bar chart
-- sortable candidate table with Kane similarity ranks where available
+- horizontally scrollable, sortable candidate table for selected raw metrics
 - StatsBomb Open Data attribution and methodology caveat
 
 ## Project Structure
@@ -175,7 +171,7 @@ tests/
 
 ## Scope And Limitations
 
-The first release focuses on event-derived centre-forward profiles. Event data does not directly measure off-ball runs away from recorded events, acceleration, maximum speed, injury risk, wage feasibility, contract feasibility, personality, tactical instructions, or true league-transfer equivalence.
+The first release focuses on event-derived player profiles from the selected historical competitions. Event data does not directly measure off-ball runs away from recorded events, acceleration, maximum speed, injury risk, wage feasibility, contract feasibility, personality, tactical instructions, or true league-transfer equivalence.
 
 League-normalised metrics should be described as relative to the observed league and position cohort, not as a full league-strength adjustment.
 
