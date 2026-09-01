@@ -36,6 +36,26 @@ def _in_attacking_third(value: Any) -> bool:
     return x is not None and x >= ATTACKING_THIRD_X_MIN
 
 
+def _moves_into_final_third(start: Any, end: Any) -> bool:
+    start_x = _x(start)
+    end_x = _x(end)
+    return (
+        start_x is not None
+        and end_x is not None
+        and start_x < ATTACKING_THIRD_X_MIN <= end_x
+    )
+
+
+def _column(events: pd.DataFrame, column: str, default: Any = None) -> pd.Series:
+    if column not in events:
+        return pd.Series(default, index=events.index)
+    return events[column]
+
+
+def _truthy_column(events: pd.DataFrame, column: str) -> pd.Series:
+    return _column(events, column, False).fillna(False).astype(bool)
+
+
 def derive_match_duration(events: pd.DataFrame) -> float:
     """Estimate match duration from event minute and second columns."""
 
@@ -97,12 +117,50 @@ def aggregate_event_features(events: pd.DataFrame) -> pd.DataFrame:
     open_play_pass_mask = _open_play_pass_mask(player_events)
     completed_pass_mask = _completed_pass_mask(player_events)
     completed_open_play_pass_mask = open_play_pass_mask & player_events["pass_outcome"].isna()
-    under_pressure_mask = player_events.get("under_pressure", False).fillna(False).astype(bool)
+    under_pressure_mask = _truthy_column(player_events, "under_pressure")
 
     shot_mask = event_type.eq("Shot")
     non_penalty_shot_mask = shot_mask & ~player_events["shot_type"].eq("Penalty")
     carry_mask = event_type.eq("Carry")
     pressure_mask = event_type.eq("Pressure")
+    tackle_mask = event_type.eq("Duel") & _column(player_events, "duel_type").eq("Tackle")
+    tackle_won_mask = tackle_mask & _column(player_events, "duel_outcome").isin(
+        ["Won", "Success In Play", "Success Out"]
+    )
+    aerial_duel_mask = event_type.eq("Duel") & _column(player_events, "duel_type").eq("Aerial Lost")
+    aerial_won_mask = (
+        _truthy_column(player_events, "pass_aerial_won")
+        | _truthy_column(player_events, "clearance_aerial_won")
+        | _truthy_column(player_events, "shot_aerial_won")
+    )
+    interception_mask = event_type.eq("Interception")
+    successful_interception_mask = interception_mask & _column(player_events, "interception_outcome").isin(
+        ["Won", "Success In Play", "Success Out"]
+    )
+    long_pass_mask = pass_mask & _column(player_events, "pass_height").eq("High Pass")
+    completed_long_pass_mask = long_pass_mask & player_events["pass_outcome"].isna()
+    cross_mask = pass_mask & _truthy_column(player_events, "pass_cross")
+    completed_cross_mask = cross_mask & player_events["pass_outcome"].isna()
+    pass_into_box_mask = pass_mask & _column(player_events, "pass_end_location").map(_inside_box)
+    completed_pass_into_box_mask = pass_into_box_mask & player_events["pass_outcome"].isna()
+    pass_into_final_third_mask = pass_mask & player_events.apply(
+        lambda row: _moves_into_final_third(row.get("location"), row.get("pass_end_location")),
+        axis=1,
+    )
+    completed_pass_into_final_third_mask = (
+        pass_into_final_third_mask & player_events["pass_outcome"].isna()
+    )
+    carry_into_final_third_mask = carry_mask & player_events.apply(
+        lambda row: _moves_into_final_third(row.get("location"), row.get("carry_end_location")),
+        axis=1,
+    )
+    goalkeeper_mask = event_type.eq("Goal Keeper")
+    goalkeeper_save_mask = goalkeeper_mask & _column(player_events, "goalkeeper_type").isin(
+        ["Shot Saved", "Save"]
+    )
+    goalkeeper_shot_faced_mask = goalkeeper_mask & _column(player_events, "goalkeeper_type").isin(
+        ["Shot Faced", "Shot Saved", "Goal Conceded", "Save", "Penalty Conceded"]
+    )
 
     features = pd.DataFrame(index=sorted(player_events["player_id"].unique()))
     features.index.name = "player_id"
@@ -132,8 +190,33 @@ def aggregate_event_features(events: pd.DataFrame) -> pd.DataFrame:
         "pressures": pressure_mask,
         "final_third_pressures": pressure_mask
         & player_events["location"].map(_in_attacking_third),
-        "counterpressures": pressure_mask
-        & player_events.get("counterpress", False).fillna(False).astype(bool),
+        "counterpressures": pressure_mask & _truthy_column(player_events, "counterpress"),
+        "ball_recoveries": event_type.eq("Ball Recovery"),
+        "interceptions": interception_mask,
+        "successful_interceptions": successful_interception_mask,
+        "clearances": event_type.eq("Clearance"),
+        "blocks": event_type.eq("Block"),
+        "tackles": tackle_mask,
+        "tackles_won": tackle_won_mask,
+        "aerial_duels": aerial_duel_mask | aerial_won_mask,
+        "aerials_won": aerial_won_mask,
+        "dribbled_past": event_type.eq("Dribbled Past"),
+        "fouls_committed": event_type.eq("Foul Committed"),
+        "yellow_cards": event_type.eq("Foul Committed")
+        & _column(player_events, "foul_committed_card").isin(["Yellow Card", "Second Yellow"]),
+        "errors": event_type.eq("Error"),
+        "long_passes_attempted": long_pass_mask,
+        "completed_long_passes": completed_long_pass_mask,
+        "crosses_attempted": cross_mask,
+        "completed_crosses": completed_cross_mask,
+        "passes_into_box": pass_into_box_mask,
+        "completed_passes_into_box": completed_pass_into_box_mask,
+        "passes_into_final_third": pass_into_final_third_mask,
+        "completed_passes_into_final_third": completed_pass_into_final_third_mask,
+        "carries_into_final_third": carry_into_final_third_mask,
+        "goalkeeper_actions": goalkeeper_mask,
+        "goalkeeper_shots_faced": goalkeeper_shot_faced_mask,
+        "goalkeeper_saves": goalkeeper_save_mask,
         "miscontrols": event_type.eq("Miscontrol"),
         "dispossessed": event_type.eq("Dispossessed"),
     }

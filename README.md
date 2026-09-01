@@ -70,7 +70,7 @@ Current verified output:
 | --- | ---: | ---: | ---: | ---: |
 | `data/processed/player_match_features.parquet` | 31,546 | 1,137 | 1,653 | 3 |
 
-The player-match table currently includes exact lineup minutes, dominant position group, shot volume, non-penalty xG, pass completion counts, pressured passing, box receipts, carries into the box, progressive carry distance, dribbles, pressures, counterpressures, miscontrols, dispossessions, and xG assisted.
+The player-match table currently includes exact lineup minutes, dominant position group, shot volume, non-penalty xG, pass completion counts, pressured passing, box receipts, carries into the box, progressive carry distance, dribbles, pressures, counterpressures, defensive actions, aerials, long passing, crossing, progression into the final third, goalkeeper actions, discipline events, miscontrols, dispossessions, and xG assisted.
 
 3. Player profiles: aggregate centre-forward player-seasons with per-90 and opportunity-adjusted metrics.
 
@@ -142,6 +142,7 @@ GitHub Pages setup:
 Dashboard features:
 
 - all-position player explorer with role-aware metric presets
+- 45 selectable radar metrics across shooting, creation, passing, carrying, pressing, defending, aerials, discipline and goalkeeping
 - position, competition, team, minutes and player-search filters
 - 2-4 player comparison
 - spider chart using position-group percentiles

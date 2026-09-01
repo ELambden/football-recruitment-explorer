@@ -24,6 +24,31 @@ COUNT_COLUMNS = [
     "pressures",
     "final_third_pressures",
     "counterpressures",
+    "ball_recoveries",
+    "interceptions",
+    "successful_interceptions",
+    "clearances",
+    "blocks",
+    "tackles",
+    "tackles_won",
+    "aerial_duels",
+    "aerials_won",
+    "dribbled_past",
+    "fouls_committed",
+    "yellow_cards",
+    "errors",
+    "long_passes_attempted",
+    "completed_long_passes",
+    "crosses_attempted",
+    "completed_crosses",
+    "passes_into_box",
+    "completed_passes_into_box",
+    "passes_into_final_third",
+    "completed_passes_into_final_third",
+    "carries_into_final_third",
+    "goalkeeper_actions",
+    "goalkeeper_shots_faced",
+    "goalkeeper_saves",
     "miscontrols",
     "dispossessed",
     "non_penalty_xg",
@@ -101,10 +126,60 @@ def add_rate_metrics(profiles: pd.DataFrame) -> pd.DataFrame:
         "successful_dribbles": "successful_dribbles_p90",
         "final_third_pressures": "final_third_pressures_p90",
         "counterpressures": "counterpressures_p90",
+        "ball_recoveries": "ball_recoveries_p90",
+        "interceptions": "interceptions_p90",
+        "successful_interceptions": "successful_interceptions_p90",
+        "clearances": "clearances_p90",
+        "blocks": "blocks_p90",
+        "tackles": "tackles_p90",
+        "tackles_won": "tackles_won_p90",
+        "aerial_duels": "aerial_duels_p90",
+        "aerials_won": "aerials_won_p90",
+        "dribbled_past": "dribbled_past_p90",
+        "fouls_committed": "fouls_committed_p90",
+        "yellow_cards": "yellow_cards_p90",
+        "errors": "errors_p90",
+        "long_passes_attempted": "long_passes_attempted_p90",
+        "completed_long_passes": "completed_long_passes_p90",
+        "crosses_attempted": "crosses_attempted_p90",
+        "completed_crosses": "completed_crosses_p90",
+        "passes_into_box": "passes_into_box_p90",
+        "completed_passes_into_box": "completed_passes_into_box_p90",
+        "passes_into_final_third": "passes_into_final_third_p90",
+        "completed_passes_into_final_third": "completed_passes_into_final_third_p90",
+        "carries_into_final_third": "carries_into_final_third_p90",
+        "goalkeeper_actions": "goalkeeper_actions_p90",
+        "goalkeeper_shots_faced": "goalkeeper_shots_faced_p90",
+        "goalkeeper_saves": "goalkeeper_saves_p90",
     }
+
+    for source in per_90_columns:
+        if source not in result.columns:
+            result[source] = 0
 
     for source, target in per_90_columns.items():
         result[target] = _safe_divide(result[source], nineties)
+
+    for column in [
+        "completed_pressured_passes",
+        "pressured_passes_attempted",
+        "completed_open_play_passes",
+        "open_play_passes_attempted",
+        "completed_long_passes",
+        "long_passes_attempted",
+        "completed_crosses",
+        "crosses_attempted",
+        "tackles_won",
+        "tackles",
+        "aerials_won",
+        "aerial_duels",
+        "goalkeeper_saves",
+        "goalkeeper_shots_faced",
+        "miscontrols",
+        "dispossessed",
+    ]:
+        if column not in result.columns:
+            result[column] = 0
 
     result["average_non_penalty_xg_per_shot"] = _safe_divide(
         result["non_penalty_xg"], result["non_penalty_shots"]
@@ -115,6 +190,29 @@ def add_rate_metrics(profiles: pd.DataFrame) -> pd.DataFrame:
     result["open_play_pass_completion_pct"] = 100 * _safe_divide(
         result["completed_open_play_passes"], result["open_play_passes_attempted"]
     )
+    result["long_pass_completion_pct"] = 100 * _safe_divide(
+        result["completed_long_passes"], result["long_passes_attempted"]
+    )
+    result["cross_completion_pct"] = 100 * _safe_divide(
+        result["completed_crosses"], result["crosses_attempted"]
+    )
+    result["tackle_success_pct"] = 100 * _safe_divide(
+        result["tackles_won"], result["tackles"]
+    )
+    result["aerial_win_pct"] = 100 * _safe_divide(
+        result["aerials_won"], result["aerial_duels"]
+    )
+    result["goalkeeper_save_pct"] = 100 * _safe_divide(
+        result["goalkeeper_saves"], result["goalkeeper_shots_faced"]
+    )
+    result["defensive_actions"] = (
+        result["ball_recoveries"]
+        + result["interceptions"]
+        + result["clearances"]
+        + result["blocks"]
+        + result["tackles"]
+    )
+    result["defensive_actions_p90"] = _safe_divide(result["defensive_actions"], nineties)
     result["ball_security_errors"] = result["miscontrols"] + result["dispossessed"]
     result["ball_security_errors_p90"] = _safe_divide(
         result["ball_security_errors"], nineties
@@ -143,9 +241,10 @@ def add_league_position_z_scores(
 def build_player_profiles(player_match: pd.DataFrame) -> pd.DataFrame:
     """Aggregate player-match features into one player-season profile row."""
 
-    missing_counts = set(COUNT_COLUMNS) - set(player_match.columns)
-    if missing_counts:
-        raise KeyError(f"Missing count columns: {sorted(missing_counts)}")
+    player_match = player_match.copy()
+    for column in COUNT_COLUMNS:
+        if column not in player_match.columns:
+            player_match[column] = 0
 
     grouped_counts = player_match.groupby(PROFILE_KEYS, as_index=False)[COUNT_COLUMNS].sum()
     minutes = player_match.groupby(PROFILE_KEYS, as_index=False).agg(
