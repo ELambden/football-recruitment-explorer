@@ -6,7 +6,7 @@ The first case study is a historical recruitment-methodology demo:
 
 > Which centre-forwards in selected 2015/16 StatsBomb open-data competitions most closely reproduce the event-derived profile of a benchmark player?
 
-The intended first benchmark is Harry Kane in the 2015/16 Premier League. This is not a 2026 transfer recommendation model. It is a reproducible demonstration of event-data ingestion, player-match feature engineering, similarity modelling, validation, and Streamlit presentation.
+The intended first benchmark is Harry Kane in the 2015/16 Premier League. This is not a 2026 transfer recommendation model. It is a reproducible demonstration of event-data ingestion, player-match feature engineering, similarity modelling, validation, and interactive dashboard presentation.
 
 ## Data Source
 
@@ -111,18 +111,60 @@ Current baseline output for Harry Kane, 2015/16 Premier League:
 Top five baseline profile alternatives: Giovanni-Guy Yann Sio, Bafetimbi Gomis, Aleksandar Mitrovic, Michy Batshuayi, and Romelu Lukaku. Similarity is a relative ranking inside the 47-player historical centre-forward cohort, not a transfer recommendation.
 
 5. Validation: split-half reliability, match bootstrap rank intervals, and weight sensitivity.
-6. Streamlit app: interactive recruitment explorer, player comparison, and methodology pages.
+6. Static dashboard: export browser JSON and publish an interactive GitHub Pages recruitment explorer.
+
+## Interactive Dashboard
+
+The repository includes a static GitHub Pages dashboard in `docs/`. It loads precomputed JSON generated from the Python pipeline, so it can run on GitHub Pages without a Python server.
+
+Regenerate the dashboard data after rebuilding profiles or similarity rankings:
+
+```bash
+python scripts/export_static_site_data.py
+```
+
+Local preview:
+
+```bash
+python -m http.server 8000 --directory docs
+```
+
+Then open http://localhost:8000.
+
+GitHub Pages setup:
+
+1. Push the committed `docs/` folder to GitHub.
+2. In GitHub, open repository `Settings` -> `Pages`.
+3. Set source to `Deploy from a branch`.
+4. Select branch `main` and folder `/docs`.
+5. Save, then use the published Pages URL once the deployment completes.
+
+Dashboard features:
+
+- all-position player explorer with role-aware metric presets
+- position, competition, team, minutes and player-search filters
+- 2-4 player comparison
+- spider chart using position-group percentiles
+- raw metric comparison bar chart
+- sortable candidate table with Kane similarity ranks where available
+- StatsBomb Open Data attribution and methodology caveat
 
 ## Project Structure
 
 ```text
 app/
   app.py
+docs/
+  index.html
+  app.js
+  styles.css
+  data/
 data/
   raw/
   interim/
   processed/
 notebooks/
+reports/
 scripts/
   run_data_audit.py
 src/

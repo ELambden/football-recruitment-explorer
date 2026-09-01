@@ -1,0 +1,202 @@
+{
+  "metricDefinitions": [
+    {
+      "id": "non_penalty_xg_p90",
+      "label": "NP xG/90",
+      "shortLabel": "NP xG",
+      "group": "Shooting threat",
+      "format": ".2f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "non_penalty_shots_p90",
+      "label": "NP shots/90",
+      "shortLabel": "Shots",
+      "group": "Shooting threat",
+      "format": ".2f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "average_non_penalty_xg_per_shot",
+      "label": "Avg NP xG/shot",
+      "shortLabel": "Shot quality",
+      "group": "Shooting threat",
+      "format": ".3f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "xg_assisted_p90",
+      "label": "xG assisted/90",
+      "shortLabel": "xA",
+      "group": "Link play / creation",
+      "format": ".2f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "completed_open_play_passes_p90",
+      "label": "Open-play passes completed/90",
+      "shortLabel": "OP passes",
+      "group": "Link play / creation",
+      "format": ".1f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "pressured_pass_completion_pct",
+      "label": "Pressured pass completion %",
+      "shortLabel": "Pressured pass %",
+      "group": "Link play / creation",
+      "format": ".1f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "open_play_pass_completion_pct",
+      "label": "Open-play pass completion %",
+      "shortLabel": "OP pass %",
+      "group": "Link play / creation",
+      "format": ".1f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "successful_box_receipts_p90",
+      "label": "Successful box receipts/90",
+      "shortLabel": "Box receives",
+      "group": "Box presence / progression",
+      "format": ".2f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "carries_into_box_p90",
+      "label": "Carries into box/90",
+      "shortLabel": "Box carries",
+      "group": "Box presence / progression",
+      "format": ".2f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "progressive_carry_distance_p90",
+      "label": "Progressive carry distance/90",
+      "shortLabel": "Carry distance",
+      "group": "Box presence / progression",
+      "format": ".1f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "successful_dribbles_p90",
+      "label": "Successful dribbles/90",
+      "shortLabel": "Dribbles",
+      "group": "Box presence / progression",
+      "format": ".2f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "final_third_pressures_p90",
+      "label": "Final-third pressures/90",
+      "shortLabel": "F3 pressures",
+      "group": "Pressing",
+      "format": ".2f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "counterpressures_p90",
+      "label": "Counterpressures/90",
+      "shortLabel": "Counterpress",
+      "group": "Pressing",
+      "format": ".2f",
+      "higherIsBetter": true
+    },
+    {
+      "id": "ball_security_errors_p90",
+      "label": "Ball-security errors/90",
+      "shortLabel": "Ball security",
+      "group": "Ball security",
+      "format": ".2f",
+      "higherIsBetter": false,
+      "displayNote": "Lower raw value is better; radar percentile is inverted."
+    }
+  ],
+  "rolePresets": {
+    "Centre Forward": [
+      "non_penalty_xg_p90",
+      "non_penalty_shots_p90",
+      "successful_box_receipts_p90",
+      "xg_assisted_p90",
+      "completed_open_play_passes_p90",
+      "final_third_pressures_p90",
+      "ball_security_errors_p90"
+    ],
+    "Attacking Midfielder / Winger": [
+      "xg_assisted_p90",
+      "completed_open_play_passes_p90",
+      "successful_dribbles_p90",
+      "progressive_carry_distance_p90",
+      "carries_into_box_p90",
+      "final_third_pressures_p90",
+      "ball_security_errors_p90"
+    ],
+    "Central Midfielder": [
+      "completed_open_play_passes_p90",
+      "pressured_pass_completion_pct",
+      "progressive_carry_distance_p90",
+      "xg_assisted_p90",
+      "counterpressures_p90",
+      "ball_security_errors_p90"
+    ],
+    "Defensive Midfielder": [
+      "completed_open_play_passes_p90",
+      "pressured_pass_completion_pct",
+      "progressive_carry_distance_p90",
+      "final_third_pressures_p90",
+      "counterpressures_p90",
+      "ball_security_errors_p90"
+    ],
+    "Full Back / Wing Back": [
+      "completed_open_play_passes_p90",
+      "open_play_pass_completion_pct",
+      "progressive_carry_distance_p90",
+      "xg_assisted_p90",
+      "final_third_pressures_p90",
+      "ball_security_errors_p90"
+    ],
+    "Centre Back": [
+      "completed_open_play_passes_p90",
+      "open_play_pass_completion_pct",
+      "pressured_pass_completion_pct",
+      "progressive_carry_distance_p90",
+      "ball_security_errors_p90"
+    ],
+    "Goalkeeper": [
+      "completed_open_play_passes_p90",
+      "open_play_pass_completion_pct",
+      "pressured_pass_completion_pct",
+      "ball_security_errors_p90"
+    ],
+    "Other": [
+      "completed_open_play_passes_p90",
+      "non_penalty_shots_p90",
+      "xg_assisted_p90",
+      "progressive_carry_distance_p90",
+      "final_third_pressures_p90",
+      "ball_security_errors_p90"
+    ]
+  },
+  "defaultRole": "Centre Forward",
+  "defaultMetricIds": [
+    "non_penalty_xg_p90",
+    "non_penalty_shots_p90",
+    "successful_box_receipts_p90",
+    "xg_assisted_p90",
+    "completed_open_play_passes_p90",
+    "final_third_pressures_p90",
+    "ball_security_errors_p90"
+  ],
+  "tableColumns": [
+    "playerName",
+    "teamName",
+    "competitionName",
+    "positionGroup",
+    "minutes",
+    "matches",
+    "similarityRank",
+    "similarityPercentile"
+  ]
+}

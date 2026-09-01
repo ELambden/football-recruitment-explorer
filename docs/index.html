@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Football Recruitment Explorer</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">StatsBomb Open Data | 2015/16</p>
+        <h1>Football Recruitment Explorer</h1>
+      </div>
+      <div class="source-note">Historical methodology demo, not transfer advice</div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Dashboard controls">
+        <section class="control-section">
+          <h2>Filters</h2>
+          <label for="positionFilter">Position group</label>
+          <select id="positionFilter"></select>
+
+          <label for="competitionFilter">Competition</label>
+          <select id="competitionFilter"></select>
+
+          <label for="teamFilter">Team</label>
+          <select id="teamFilter"></select>
+
+          <label for="minutesFilter">Minimum minutes</label>
+          <div class="range-row">
+            <input id="minutesFilter" type="range" min="0" max="3000" value="900" step="90" />
+            <output id="minutesValue" for="minutesFilter">900</output>
+          </div>
+
+          <label for="searchFilter">Player search</label>
+          <input id="searchFilter" type="search" placeholder="Search player" autocomplete="off" />
+
+          <label class="check-row" for="kaneOnlyFilter">
+            <input id="kaneOnlyFilter" type="checkbox" />
+            <span>Kane similarity cohort only</span>
+          </label>
+        </section>
+
+        <section class="control-section">
+          <h2>Players</h2>
+          <label for="playerSelect1">Player 1</label>
+          <select id="playerSelect1" class="player-select"></select>
+          <label for="playerSelect2">Player 2</label>
+          <select id="playerSelect2" class="player-select"></select>
+          <label for="playerSelect3">Player 3</label>
+          <select id="playerSelect3" class="player-select"></select>
+          <label for="playerSelect4">Player 4</label>
+          <select id="playerSelect4" class="player-select"></select>
+          <button id="resetPlayers" type="button">Reset to Kane shortlist</button>
+        </section>
+
+        <section class="control-section">
+          <h2>Radar Metrics</h2>
+          <div id="metricCheckboxes" class="metric-list"></div>
+        </section>
+      </aside>
+
+      <main class="main">
+        <section class="summary-band">
+          <div>
+            <span class="summary-label">Players</span>
+            <strong id="summaryPlayers">-</strong>
+          </div>
+          <div>
+            <span class="summary-label">Competitions</span>
+            <strong id="summaryCompetitions">-</strong>
+          </div>
+          <div>
+            <span class="summary-label">Selected</span>
+            <strong id="summarySelected">-</strong>
+          </div>
+          <div>
+            <span class="summary-label">Radar scale</span>
+            <strong>Role percentile</strong>
+          </div>
+        </section>
+
+        <section class="chart-grid">
+          <div class="panel panel-large">
+            <div class="panel-header">
+              <div>
+                <h2>Player Profile Radar</h2>
+                <p>0-100 percentile within each player's dominant position group.</p>
+              </div>
+            </div>
+            <div id="radarChart" class="chart"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Raw Metric Comparison</h2>
+                <p>Direct values for the selected players.</p>
+              </div>
+              <select id="barMetricSelect"></select>
+            </div>
+            <div id="barChart" class="chart small-chart"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header table-header">
+            <div>
+              <h2>Candidate Table</h2>
+              <p>Filtered player profiles with Kane similarity rank where available.</p>
+            </div>
+            <div id="tableCount" class="table-count">0 rows</div>
+          </div>
+          <div class="table-wrap">
+            <table id="candidateTable">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="method-band">
+          <h2>Methodology Notes</h2>
+          <p>
+            Profiles are precomputed from StatsBomb Open Data. Radar values are role-aware percentiles, so a centre-forward and goalkeeper can both be displayed, but each is benchmarked against his own dominant position group. The Kane similarity rank is only calculated for the 47-player centre-forward cohort with 900+ minutes and 60%+ centre-forward minutes.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      window.DASHBOARD_DATA_PATH = "data/site-data.json";
+      window.DASHBOARD_METRICS_PATH = "data/metrics.json";
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
