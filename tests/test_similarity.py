@@ -1,7 +1,10 @@
 import pandas as pd
 import pytest
 
-from football_recruitment.similarity import calculate_similarity
+from football_recruitment.similarity import (
+    build_feature_weights,
+    calculate_similarity,
+)
 
 
 def test_calculate_similarity_ranks_target_first() -> None:
@@ -24,6 +27,8 @@ def test_calculate_similarity_ranks_target_first() -> None:
 
     assert result.iloc[0]["player_id"] == 1
     assert result.iloc[0]["similarity_percentile"] == 100
+    assert result.iloc[0]["similarity_rank"] == 1
+    assert result.iloc[0]["is_target"]
 
 
 def test_calculate_similarity_requires_complete_weights() -> None:
@@ -43,3 +48,16 @@ def test_calculate_similarity_requires_complete_weights() -> None:
             feature_weights={},
         )
 
+
+def test_build_feature_weights_distributes_group_weight_across_features() -> None:
+    weights = build_feature_weights(
+        {"threat": ["xg", "shots"], "pressing": ["pressures"]},
+        {"threat": 0.6, "pressing": 0.4},
+    )
+
+    assert weights == {"xg": 0.3, "shots": 0.3, "pressures": 0.4}
+
+
+def test_build_feature_weights_requires_matching_groups() -> None:
+    with pytest.raises(ValueError):
+        build_feature_weights({"threat": ["xg"]}, {"pressing": 1.0})

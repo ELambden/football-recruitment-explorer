@@ -94,6 +94,22 @@ Initial benchmark row:
 The first profile build includes non-penalty xG per 90, non-penalty shots per 90, average non-penalty xG per shot, box receipts per 90, carries into the box per 90, xG assisted per 90, completed open-play passes per 90, pressured-pass completion, progressive carry distance per 90, successful dribbles per 90, final-third pressures per 90, counterpressures per 90, and ball-security errors per 90. It also adds league-position z-scores for the main role metrics.
 
 4. Similarity model: robust scaling, feature-group weights, and benchmark-player rankings.
+
+```bash
+python scripts/build_similarity_rankings.py
+```
+
+Current baseline output for Harry Kane, 2015/16 Premier League:
+
+| Artifact | Rows | Notes |
+| --- | ---: | --- |
+| `data/processed/harry_kane_similarity_rankings.parquet` | 47 | Full centre-forward cohort, including target |
+| `data/processed/harry_kane_similarity_top20.csv` | 20 | Top candidate profiles excluding target |
+| `data/processed/centre_forward_similarity_feature_weights.csv` | 13 | Distributed feature weights used by the baseline model |
+| `reports/harry_kane_similarity.md` | n/a | Concise generated shortlist report |
+
+Top five baseline profile alternatives: Giovanni-Guy Yann Sio, Bafetimbi Gomis, Aleksandar Mitrovic, Michy Batshuayi, and Romelu Lukaku. Similarity is a relative ranking inside the 47-player historical centre-forward cohort, not a transfer recommendation.
+
 5. Validation: split-half reliability, match bootstrap rank intervals, and weight sensitivity.
 6. Streamlit app: interactive recruitment explorer, player comparison, and methodology pages.
 
