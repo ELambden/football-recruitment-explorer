@@ -7,6 +7,7 @@ from scripts.export_static_site_data import (
     METRIC_DEFINITIONS,
     add_metric_percentiles,
     build_metrics_data,
+    build_players_data,
     build_site_data,
 )
 
@@ -42,16 +43,20 @@ def test_add_metric_percentiles_inverts_ball_security_errors() -> None:
     ]
 
 
-def test_build_site_data_contains_harry_kane_and_valid_percentiles() -> None:
+def test_build_site_data_contains_profiles_and_valid_percentiles() -> None:
     site_data = build_site_data()
     assert site_data["players"]
 
-    kane_rows = [player for player in site_data["players"] if player["playerId"] == 10955]
-    assert kane_rows
-    assert kane_rows[0]["playerName"] == "Harry Kane"
-
     metric_ids = {metric["id"] for metric in METRIC_DEFINITIONS}
+    deprecated_keys = {
+        "similarityRank",
+        "similarityPercentile",
+        "profileDistance",
+        "isTarget",
+        "isKaneSimilarityCandidate",
+    }
     for player in site_data["players"][:25]:
+        assert deprecated_keys.isdisjoint(player)
         assert set(player["metrics"]) == metric_ids
         assert set(player["percentiles"]) == metric_ids
         for value in player["percentiles"].values():
@@ -66,3 +71,14 @@ def test_docs_html_references_existing_static_assets() -> None:
     assert "styles.css" in html
     assert "app.js" in html
     assert "data/site-data.json" in html or "site-data.json" in html
+
+
+def test_build_players_data_is_compact_dashboard_contract() -> None:
+    site_data = build_site_data()
+    players_data = build_players_data(site_data)
+
+    assert players_data["players"]
+    player = players_data["players"][0]
+    assert set(player) == {"id", "n", "t", "c", "g", "sh", "min", "m", "st", "v", "p"}
+    assert set(player["v"]) == {metric["id"] for metric in METRIC_DEFINITIONS}
+    assert set(player["p"]) == {metric["id"] for metric in METRIC_DEFINITIONS}

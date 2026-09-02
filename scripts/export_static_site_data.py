@@ -15,9 +15,9 @@ PROCESSED_DIR = ROOT / "data" / "processed"
 DOCS_DATA_DIR = ROOT / "docs" / "data"
 
 PROFILE_PATH = PROCESSED_DIR / "player_profiles.parquet"
-RANKING_PATH = PROCESSED_DIR / "harry_kane_similarity_rankings.parquet"
 SITE_DATA_PATH = DOCS_DATA_DIR / "site-data.json"
 METRICS_PATH = DOCS_DATA_DIR / "metrics.json"
+PLAYERS_PATH = DOCS_DATA_DIR / "players.json"
 
 DASHBOARD_COLUMNS = [
     "player_id",
@@ -139,7 +139,6 @@ ROLE_PRESETS = {
 
 
 DEFAULT_ROLE = "Centre Forward"
-DEFAULT_PLAYERS = [10955, 3018, 20521, 4269]
 
 
 def _clean_value(value: Any) -> Any:
@@ -178,36 +177,6 @@ def add_metric_percentiles(profiles: pd.DataFrame) -> pd.DataFrame:
     return result
 
 
-def merge_similarity_fields(profiles: pd.DataFrame) -> pd.DataFrame:
-    if not RANKING_PATH.exists():
-        profiles["similarity_rank"] = np.nan
-        profiles["similarity_percentile"] = np.nan
-        profiles["profile_distance"] = np.nan
-        profiles["is_target"] = False
-        profiles["is_kane_similarity_candidate"] = False
-        return profiles
-
-    rankings = pd.read_parquet(RANKING_PATH)[
-        [
-            "competition_name",
-            "season_name",
-            "player_id",
-            "similarity_rank",
-            "similarity_percentile",
-            "profile_distance",
-            "is_target",
-        ]
-    ].copy()
-    merged = profiles.merge(
-        rankings,
-        on=["competition_name", "season_name", "player_id"],
-        how="left",
-    )
-    merged["is_target"] = merged["is_target"].fillna(False).astype(bool)
-    merged["is_kane_similarity_candidate"] = merged["similarity_rank"].notna()
-    return merged
-
-
 def build_site_data() -> dict[str, Any]:
     if not PROFILE_PATH.exists():
         raise FileNotFoundError("Run scripts/build_player_profiles.py before exporting site data.")
@@ -218,7 +187,6 @@ def build_site_data() -> dict[str, Any]:
         raise KeyError(f"Missing dashboard columns: {sorted(missing)}")
 
     profiles = profiles[DASHBOARD_COLUMNS].copy()
-    profiles = merge_similarity_fields(profiles)
     profiles = add_metric_percentiles(profiles)
 
     percentile_columns = [f"{metric['id']}_role_percentile" for metric in METRIC_DEFINITIONS]
@@ -241,11 +209,6 @@ def build_site_data() -> dict[str, Any]:
             "minutes": _clean_value(row["minutes"]),
             "matches": _clean_value(row["matches"]),
             "starts": _clean_value(row["starts"]),
-            "similarityRank": _clean_value(row.get("similarity_rank")),
-            "similarityPercentile": _clean_value(row.get("similarity_percentile")),
-            "profileDistance": _clean_value(row.get("profile_distance")),
-            "isTarget": bool(row.get("is_target", False)),
-            "isKaneSimilarityCandidate": bool(row.get("is_kane_similarity_candidate", False)),
             "metrics": raw_metrics,
             "percentiles": percentiles,
         }
@@ -265,8 +228,45 @@ def build_site_data() -> dict[str, Any]:
             "players": len(records),
         },
         "defaultRole": DEFAULT_ROLE,
-        "defaultPlayerIds": DEFAULT_PLAYERS,
         "players": records,
+    }
+
+
+def _round_browser_number(value: Any, digits: int) -> Any:
+    value = _clean_value(value)
+    if isinstance(value, float):
+        return round(value, digits)
+    return value
+
+
+def build_players_data(site_data: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Return a compact browser payload for the redesigned static explorer."""
+
+    site_data = site_data or build_site_data()
+    players = []
+    for player in site_data["players"]:
+        players.append(
+            {
+                "id": f"{player['competitionName']}|{player['seasonName']}|{player['playerId']}",
+                "n": player["playerName"],
+                "t": player["teamName"],
+                "c": player["competitionName"],
+                "g": player["positionGroup"],
+                "sh": _round_browser_number(player["positionShare"], 2),
+                "min": _round_browser_number(player["minutes"], 0),
+                "m": _clean_value(player["matches"]),
+                "st": _clean_value(player["starts"]),
+                "v": {key: _round_browser_number(value, 3) for key, value in player["metrics"].items()},
+                "p": {key: _round_browser_number(value, 1) for key, value in player["percentiles"].items()},
+            }
+        )
+
+    return {
+        "generatedAt": site_data["generatedAt"],
+        "source": site_data["source"],
+        "scope": site_data["scope"],
+        "defaultRole": site_data["defaultRole"],
+        "players": players,
     }
 
 
@@ -283,8 +283,7 @@ def build_metrics_data() -> dict[str, Any]:
             "positionGroup",
             "minutes",
             "matches",
-            "similarityRank",
-            "similarityPercentile",
+            "starts",
         ],
     }
 
@@ -294,12 +293,20 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def write_compact_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
+
 def main() -> None:
     site_data = build_site_data()
     metrics_data = build_metrics_data()
+    players_data = build_players_data(site_data)
     write_json(SITE_DATA_PATH, site_data)
+    write_compact_json(PLAYERS_PATH, players_data)
     write_json(METRICS_PATH, metrics_data)
     print(f"Wrote {SITE_DATA_PATH}")
+    print(f"Wrote {PLAYERS_PATH}")
     print(f"Wrote {METRICS_PATH}")
     print(f"Players: {site_data['scope']['players']}")
     print(f"Metrics: {len(metrics_data['metricDefinitions'])}")

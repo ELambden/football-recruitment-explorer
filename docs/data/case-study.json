@@ -1,0 +1,1211 @@
+{
+  "title": "Harry Kane 2015/16 Centre-Forward Shortlist",
+  "source": "StatsBomb Open Data",
+  "question": "Which centre-forwards in the 2015/16 open-data sample had event profiles closest to Harry Kane?",
+  "scope": {
+    "positionGroup": "Centre Forward",
+    "minMinutes": 900,
+    "minPositionShare": 0.6,
+    "cohortPlayers": 47,
+    "competitions": [
+      "Ligue 1",
+      "Premier League",
+      "Serie A"
+    ],
+    "season": "2015/2016"
+  },
+  "benchmark": {
+    "playerId": 10955,
+    "playerName": "Harry Kane",
+    "teamName": "Tottenham Hotspur",
+    "competitionName": "Premier League",
+    "seasonName": "2015/2016",
+    "minutes": 3486.65,
+    "matches": 38,
+    "positionGroup": "Centre Forward",
+    "positionShare": 1.0
+  },
+  "metrics": [
+    {
+      "id": "non_penalty_xg_p90",
+      "label": "NP xG/90",
+      "group": "threat"
+    },
+    {
+      "id": "non_penalty_shots_p90",
+      "label": "NP shots/90",
+      "group": "threat"
+    },
+    {
+      "id": "average_non_penalty_xg_per_shot",
+      "label": "Avg NP xG/shot",
+      "group": "threat"
+    },
+    {
+      "id": "successful_box_receipts_p90",
+      "label": "Box receipts/90",
+      "group": "progression"
+    },
+    {
+      "id": "xg_assisted_p90",
+      "label": "xG assisted/90",
+      "group": "link_play"
+    },
+    {
+      "id": "completed_open_play_passes_p90",
+      "label": "Open-play passes/90",
+      "group": "link_play"
+    },
+    {
+      "id": "final_third_pressures_p90",
+      "label": "Final-third pressures/90",
+      "group": "pressing"
+    },
+    {
+      "id": "counterpressures_p90",
+      "label": "Counterpressures/90",
+      "group": "pressing"
+    },
+    {
+      "id": "ball_security_errors_p90",
+      "label": "Ball-security errors/90",
+      "group": "ball_security"
+    }
+  ],
+  "featureWeights": [
+    {
+      "feature": "non_penalty_xg_p90_league_pos_z",
+      "weight": 0.1
+    },
+    {
+      "feature": "non_penalty_shots_p90_league_pos_z",
+      "weight": 0.1
+    },
+    {
+      "feature": "average_non_penalty_xg_per_shot_league_pos_z",
+      "weight": 0.1
+    },
+    {
+      "feature": "xg_assisted_p90_league_pos_z",
+      "weight": 0.083333
+    },
+    {
+      "feature": "completed_open_play_passes_p90_league_pos_z",
+      "weight": 0.083333
+    },
+    {
+      "feature": "pressured_pass_completion_pct",
+      "weight": 0.083333
+    },
+    {
+      "feature": "successful_box_receipts_p90_league_pos_z",
+      "weight": 0.05
+    },
+    {
+      "feature": "carries_into_box_p90_league_pos_z",
+      "weight": 0.05
+    },
+    {
+      "feature": "progressive_carry_distance_p90_league_pos_z",
+      "weight": 0.05
+    },
+    {
+      "feature": "successful_dribbles_p90_league_pos_z",
+      "weight": 0.05
+    },
+    {
+      "feature": "final_third_pressures_p90_league_pos_z",
+      "weight": 0.075
+    },
+    {
+      "feature": "counterpressures_p90_league_pos_z",
+      "weight": 0.075
+    },
+    {
+      "feature": "ball_security_errors_p90_league_pos_z",
+      "weight": 0.1
+    }
+  ],
+  "candidates": [
+    {
+      "playerId": 3018,
+      "playerName": "Giovanni-Guy Yann Sio",
+      "teamName": "Rennes",
+      "competitionName": "Ligue 1",
+      "seasonName": "2015/2016",
+      "minutes": 2724.866667,
+      "matches": 34,
+      "positionGroup": "Centre Forward",
+      "positionShare": 0.729051,
+      "similarityRank": 2,
+      "similarityPercentile": 97.826087,
+      "profileDistance": 0.607035,
+      "rankInterval": {
+        "lower": 2.0,
+        "median": 3.0,
+        "upper": 10.2,
+        "iterations": 97
+      },
+      "sensitivity": {
+        "scenariosInTopN": 4.0,
+        "bestRank": 2.0,
+        "worstRank": 6.0,
+        "medianRank": 2.0
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.294802,
+          "delta": -0.162548
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 2.31204,
+          "delta": -1.63731
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.127507,
+          "delta": 0.011703
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 2.708389,
+          "delta": -0.079387
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.10051,
+          "delta": 0.020466
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 15.259462,
+          "delta": -0.537937
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 8.521518,
+          "delta": 2.223209
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 3.368972,
+          "delta": 0.555383
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 5.38375,
+          "delta": 0.272827
+        }
+      ],
+      "note": "Closest to Kane on Avg NP xG/shot and xG assisted/90."
+    },
+    {
+      "playerId": 20521,
+      "playerName": "Bafétimbi Gomis",
+      "teamName": "Swansea City",
+      "competitionName": "Premier League",
+      "seasonName": "2015/2016",
+      "minutes": 1811.733333,
+      "matches": 33,
+      "positionGroup": "Centre Forward",
+      "positionShare": 0.743119,
+      "similarityRank": 3,
+      "similarityPercentile": 95.652174,
+      "profileDistance": 0.624439,
+      "rankInterval": {
+        "lower": 2.0,
+        "median": 7.0,
+        "upper": 24.0,
+        "iterations": 94
+      },
+      "sensitivity": {
+        "scenariosInTopN": 4.0,
+        "bestRank": 2.0,
+        "worstRank": 5.0,
+        "medianRank": 3.5
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.339989,
+          "delta": -0.117361
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 2.881219,
+          "delta": -1.068131
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.118002,
+          "delta": 0.002198
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 2.980571,
+          "delta": 0.192795
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.078559,
+          "delta": -0.001485
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 17.486017,
+          "delta": 1.688618
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 5.86179,
+          "delta": -0.436519
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 2.831543,
+          "delta": 0.017954
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 6.209523,
+          "delta": 1.0986
+        }
+      ],
+      "note": "Closest to Kane on xG assisted/90 and Avg NP xG/shot."
+    },
+    {
+      "playerId": 4269,
+      "playerName": "Aleksandar Mitrović",
+      "teamName": "Newcastle United",
+      "competitionName": "Premier League",
+      "seasonName": "2015/2016",
+      "minutes": 2326.0,
+      "matches": 34,
+      "positionGroup": "Centre Forward",
+      "positionShare": 0.701892,
+      "similarityRank": 4,
+      "similarityPercentile": 93.478261,
+      "profileDistance": 0.635728,
+      "rankInterval": {
+        "lower": 2.4,
+        "median": 7.0,
+        "upper": 20.6,
+        "iterations": 89
+      },
+      "sensitivity": {
+        "scenariosInTopN": 4.0,
+        "bestRank": 3.0,
+        "worstRank": 4.0,
+        "medianRank": 3.0
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.398305,
+          "delta": -0.059045
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 3.018057,
+          "delta": -0.931293
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.131974,
+          "delta": 0.01617
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 3.404987,
+          "delta": 0.617211
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.098732,
+          "delta": 0.018688
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 16.792777,
+          "delta": 0.995378
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 6.190886,
+          "delta": -0.107423
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 2.901978,
+          "delta": 0.088389
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 7.003439,
+          "delta": 1.892516
+        }
+      ],
+      "note": "Closest to Kane on Avg NP xG/shot and xG assisted/90."
+    },
+    {
+      "playerId": 3457,
+      "playerName": "Michy Batshuayi Tunga",
+      "teamName": "Olympique de Marseille",
+      "competitionName": "Ligue 1",
+      "seasonName": "2015/2016",
+      "minutes": 3052.416667,
+      "matches": 36,
+      "positionGroup": "Centre Forward",
+      "positionShare": 0.894188,
+      "similarityRank": 5,
+      "similarityPercentile": 91.304348,
+      "profileDistance": 0.668931,
+      "rankInterval": {
+        "lower": 2.0,
+        "median": 10.0,
+        "upper": 38.15,
+        "iterations": 100
+      },
+      "sensitivity": {
+        "scenariosInTopN": 4.0,
+        "bestRank": 4.0,
+        "worstRank": 6.0,
+        "medianRank": 5.5
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.505344,
+          "delta": 0.047994
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 3.567665,
+          "delta": -0.381685
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.141646,
+          "delta": 0.025842
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 3.862513,
+          "delta": 1.074737
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.080035,
+          "delta": -9e-06
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 12.737448,
+          "delta": -3.059951
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 7.105845,
+          "delta": 0.807536
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 3.950968,
+          "delta": 1.137379
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 5.926452,
+          "delta": 0.815529
+        }
+      ],
+      "note": "Closest to Kane on xG assisted/90 and Avg NP xG/shot."
+    },
+    {
+      "playerId": 3289,
+      "playerName": "Romelu Lukaku Menama",
+      "teamName": "Everton",
+      "competitionName": "Premier League",
+      "seasonName": "2015/2016",
+      "minutes": 3299.483333,
+      "matches": 37,
+      "positionGroup": "Centre Forward",
+      "positionShare": 0.913901,
+      "similarityRank": 6,
+      "similarityPercentile": 89.130435,
+      "profileDistance": 0.678364,
+      "rankInterval": {
+        "lower": 2.0,
+        "median": 7.0,
+        "upper": 27.05,
+        "iterations": 100
+      },
+      "sensitivity": {
+        "scenariosInTopN": 4.0,
+        "bestRank": 4.0,
+        "worstRank": 8.0,
+        "medianRank": 7.0
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.45253,
+          "delta": -0.00482
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 3.109578,
+          "delta": -0.839772
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.145528,
+          "delta": 0.029724
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 3.791503,
+          "delta": 1.003727
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.132057,
+          "delta": 0.052013
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 19.257561,
+          "delta": 3.460162
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 4.309766,
+          "delta": -1.988543
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 1.991221,
+          "delta": -0.822368
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 5.919109,
+          "delta": 0.808186
+        }
+      ],
+      "note": "Closest to Kane on NP xG/90 and Avg NP xG/shot."
+    },
+    {
+      "playerId": 15996,
+      "playerName": "Éderzito António Macedo Lopes",
+      "teamName": "Lille",
+      "competitionName": "Ligue 1",
+      "seasonName": "2015/2016",
+      "minutes": 1158.733333,
+      "matches": 13,
+      "positionGroup": "Centre Forward",
+      "positionShare": 1.0,
+      "similarityRank": 7,
+      "similarityPercentile": 86.956522,
+      "profileDistance": 0.686518,
+      "rankInterval": {
+        "lower": 2.0,
+        "median": 13.0,
+        "upper": 27.9,
+        "iterations": 72
+      },
+      "sensitivity": {
+        "scenariosInTopN": 4.0,
+        "bestRank": 5.0,
+        "worstRank": 9.0,
+        "medianRank": 6.0
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.250813,
+          "delta": -0.206537
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 2.330131,
+          "delta": -1.619219
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.107639,
+          "delta": -0.008165
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 3.495196,
+          "delta": 0.70742
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.131675,
+          "delta": 0.051631
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 16.077901,
+          "delta": 0.280502
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 7.378747,
+          "delta": 1.080438
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 3.961222,
+          "delta": 1.147633
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 6.213682,
+          "delta": 1.102759
+        }
+      ],
+      "note": "Closest to Kane on Avg NP xG/shot and xG assisted/90."
+    },
+    {
+      "playerId": 6973,
+      "playerName": "Edin Džeko",
+      "teamName": "AS Roma",
+      "competitionName": "Serie A",
+      "seasonName": "2015/2016",
+      "minutes": 2087.266667,
+      "matches": 31,
+      "positionGroup": "Centre Forward",
+      "positionShare": 0.863098,
+      "similarityRank": 8,
+      "similarityPercentile": 84.782609,
+      "profileDistance": 0.723354,
+      "rankInterval": {
+        "lower": 3.0,
+        "median": 14.0,
+        "upper": 41.0,
+        "iterations": 100
+      },
+      "sensitivity": {
+        "scenariosInTopN": 4.0,
+        "bestRank": 7.0,
+        "worstRank": 8.0,
+        "medianRank": 7.5
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.513173,
+          "delta": 0.055823
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 3.708199,
+          "delta": -0.241151
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.138389,
+          "delta": 0.022585
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 5.174231,
+          "delta": 2.386455
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.07429,
+          "delta": -0.005754
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 15.048389,
+          "delta": -0.74901
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 6.898975,
+          "delta": 0.600666
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 3.837555,
+          "delta": 1.023966
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 5.950366,
+          "delta": 0.839443
+        }
+      ],
+      "note": "Closest to Kane on xG assisted/90 and Avg NP xG/shot."
+    },
+    {
+      "playerId": 8871,
+      "playerName": "Marco Borriello",
+      "teamName": "Atalanta",
+      "competitionName": "Serie A",
+      "seasonName": "2015/2016",
+      "minutes": 1695.816667,
+      "matches": 27,
+      "positionGroup": "Centre Forward",
+      "positionShare": 0.800372,
+      "similarityRank": 9,
+      "similarityPercentile": 82.608696,
+      "profileDistance": 0.759879,
+      "rankInterval": {
+        "lower": 3.0,
+        "median": 11.0,
+        "upper": 30.15,
+        "iterations": 98
+      },
+      "sensitivity": {
+        "scenariosInTopN": 4.0,
+        "bestRank": 9.0,
+        "worstRank": 11.0,
+        "medianRank": 9.5
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.286369,
+          "delta": -0.170981
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 2.865876,
+          "delta": -1.083474
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.099924,
+          "delta": -0.01588
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 3.343522,
+          "delta": 0.555746
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.057712,
+          "delta": -0.022332
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 15.496958,
+          "delta": -0.300441
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 5.625608,
+          "delta": -0.672701
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 2.918948,
+          "delta": 0.105359
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 5.837895,
+          "delta": 0.726972
+        }
+      ],
+      "note": "Closest to Kane on Avg NP xG/shot and xG assisted/90."
+    },
+    {
+      "playerId": 3604,
+      "playerName": "Olivier Giroud",
+      "teamName": "Arsenal",
+      "competitionName": "Premier League",
+      "seasonName": "2015/2016",
+      "minutes": 2548.166667,
+      "matches": 38,
+      "positionGroup": "Centre Forward",
+      "positionShare": 0.976748,
+      "similarityRank": 10,
+      "similarityPercentile": 80.434783,
+      "profileDistance": 0.805573,
+      "rankInterval": {
+        "lower": 8.95,
+        "median": 18.5,
+        "upper": 39.05,
+        "iterations": 100
+      },
+      "sensitivity": {
+        "scenariosInTopN": 4.0,
+        "bestRank": 7.0,
+        "worstRank": 10.0,
+        "medianRank": 9.5
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.432106,
+          "delta": -0.025244
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 3.60259,
+          "delta": -0.34676
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.119943,
+          "delta": 0.004139
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 6.110275,
+          "delta": 3.322499
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.150586,
+          "delta": 0.070542
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 16.60017,
+          "delta": 0.802771
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 6.428151,
+          "delta": 0.129842
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 3.531951,
+          "delta": 0.718362
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 5.227288,
+          "delta": 0.116365
+        }
+      ],
+      "note": "Closest to Kane on Avg NP xG/shot and NP xG/90."
+    },
+    {
+      "playerId": 3038,
+      "playerName": "Andy Delort",
+      "teamName": "Stade Malherbe Caen",
+      "competitionName": "Ligue 1",
+      "seasonName": "2015/2016",
+      "minutes": 3244.983333,
+      "matches": 36,
+      "positionGroup": "Centre Forward",
+      "positionShare": 0.931166,
+      "similarityRank": 11,
+      "similarityPercentile": 78.26087,
+      "profileDistance": 0.810303,
+      "rankInterval": {
+        "lower": 3.0,
+        "median": 16.0,
+        "upper": 43.0,
+        "iterations": 100
+      },
+      "sensitivity": {
+        "scenariosInTopN": 2.0,
+        "bestRank": 10.0,
+        "worstRank": 11.0,
+        "medianRank": 10.5
+      },
+      "metricDeltas": [
+        {
+          "metric": "non_penalty_xg_p90",
+          "label": "NP xG/90",
+          "group": "threat",
+          "targetValue": 0.45735,
+          "candidateValue": 0.285598,
+          "delta": -0.171752
+        },
+        {
+          "metric": "non_penalty_shots_p90",
+          "label": "NP shots/90",
+          "group": "threat",
+          "targetValue": 3.94935,
+          "candidateValue": 3.827446,
+          "delta": -0.121904
+        },
+        {
+          "metric": "average_non_penalty_xg_per_shot",
+          "label": "Avg NP xG/shot",
+          "group": "threat",
+          "targetValue": 0.115804,
+          "candidateValue": 0.074619,
+          "delta": -0.041185
+        },
+        {
+          "metric": "successful_box_receipts_p90",
+          "label": "Box receipts/90",
+          "group": "progression",
+          "targetValue": 2.787776,
+          "candidateValue": 2.939923,
+          "delta": 0.152147
+        },
+        {
+          "metric": "xg_assisted_p90",
+          "label": "xG assisted/90",
+          "group": "link_play",
+          "targetValue": 0.080044,
+          "candidateValue": 0.114895,
+          "delta": 0.034851
+        },
+        {
+          "metric": "completed_open_play_passes_p90",
+          "label": "Open-play passes/90",
+          "group": "link_play",
+          "targetValue": 15.797399,
+          "candidateValue": 13.285122,
+          "delta": -2.512277
+        },
+        {
+          "metric": "final_third_pressures_p90",
+          "label": "Final-third pressures/90",
+          "group": "pressing",
+          "targetValue": 6.298309,
+          "candidateValue": 7.127926,
+          "delta": 0.829617
+        },
+        {
+          "metric": "counterpressures_p90",
+          "label": "Counterpressures/90",
+          "group": "pressing",
+          "targetValue": 2.813589,
+          "candidateValue": 3.41142,
+          "delta": 0.597831
+        },
+        {
+          "metric": "ball_security_errors_p90",
+          "label": "Ball-security errors/90",
+          "group": "ball_security",
+          "targetValue": 5.110923,
+          "candidateValue": 7.488482,
+          "delta": 2.377559
+        }
+      ],
+      "note": "Closest to Kane on xG assisted/90 and Avg NP xG/shot."
+    }
+  ],
+  "validation": {
+    "splitHalfReliability": [
+      {
+        "metric": "non_penalty_xg_p90",
+        "label": "NP xG/90",
+        "playersCompared": 892,
+        "correlation": 0.813121
+      },
+      {
+        "metric": "non_penalty_shots_p90",
+        "label": "NP shots/90",
+        "playersCompared": 892,
+        "correlation": 0.894075
+      },
+      {
+        "metric": "average_non_penalty_xg_per_shot",
+        "label": "Avg NP xG/shot",
+        "playersCompared": 892,
+        "correlation": 0.386336
+      },
+      {
+        "metric": "successful_box_receipts_p90",
+        "label": "Box receipts/90",
+        "playersCompared": 892,
+        "correlation": 0.884344
+      },
+      {
+        "metric": "xg_assisted_p90",
+        "label": "xG assisted/90",
+        "playersCompared": 892,
+        "correlation": 0.745785
+      },
+      {
+        "metric": "completed_open_play_passes_p90",
+        "label": "Open-play passes/90",
+        "playersCompared": 892,
+        "correlation": 0.935473
+      },
+      {
+        "metric": "final_third_pressures_p90",
+        "label": "Final-third pressures/90",
+        "playersCompared": 892,
+        "correlation": 0.924244
+      },
+      {
+        "metric": "counterpressures_p90",
+        "label": "Counterpressures/90",
+        "playersCompared": 892,
+        "correlation": 0.869341
+      },
+      {
+        "metric": "ball_security_errors_p90",
+        "label": "Ball-security errors/90",
+        "playersCompared": 892,
+        "correlation": 0.94014
+      }
+    ],
+    "weightScenarios": [
+      "balanced",
+      "link-play heavy",
+      "pressing heavy",
+      "threat heavy"
+    ],
+    "bootstrapIterations": 100
+  },
+  "limitations": [
+    "Historical event-profile similarity only; not a transfer recommendation.",
+    "No contract, wage, age, injury, physical, or scouting-video context.",
+    "League-normalised metrics are relative to the observed open-data cohort."
+  ]
+}

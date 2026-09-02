@@ -4,133 +4,187 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Football Recruitment Explorer</title>
-    <link rel="stylesheet" href="styles.css?v=2026-09-02-all-position-v3" />
-    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <link rel="stylesheet" href="styles.css?v=2026-09-02-broadsheet-case-study" />
   </head>
   <body>
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">StatsBomb Open Data | 2015/16</p>
+    <div class="page-shell">
+      <header class="masthead">
+        <div class="rule-heavy"></div>
+        <div class="dateline">
+          <span>StatsBomb Open Data | Season 2015/16</span>
+          <span>Premier League | Ligue 1 | Serie A</span>
+        </div>
+        <div class="rule-light"></div>
         <h1>Football Recruitment Explorer</h1>
-      </div>
-      <div class="source-note">Historical methodology demo, not transfer advice</div>
-    </header>
+        <p class="standfirst">A recruitment case study and interactive profile workbench built from event data, exact lineup minutes, role-aware percentiles, similarity modelling, and validation checks.</p>
+        <nav class="jump-nav" aria-label="Page sections">
+          <a href="#case-study">Case study</a>
+          <a href="#explorer">Explorer</a>
+          <a href="#method">Method</a>
+        </nav>
+      </header>
 
-    <div class="layout">
-      <aside class="sidebar" aria-label="Dashboard controls">
-        <section class="control-section">
-          <h2>Filters</h2>
-          <label for="positionFilter">Position group</label>
-          <select id="positionFilter"></select>
-
-          <label for="competitionFilter">Competition</label>
-          <select id="competitionFilter"></select>
-
-          <label for="teamFilter">Team</label>
-          <select id="teamFilter"></select>
-
-          <label for="minutesFilter">Minimum minutes</label>
-          <div class="range-row">
-            <input id="minutesFilter" type="range" min="0" max="3000" value="900" step="90" />
-            <output id="minutesValue" for="minutesFilter">900</output>
+      <main>
+        <section id="case-study" class="case-grid" aria-label="Recruitment case study">
+          <div class="case-lead">
+            <p class="eyebrow">Recruitment case file</p>
+            <h2 id="caseTitle">Harry Kane 2015/16 Centre-Forward Shortlist</h2>
+            <p id="caseQuestion" class="muted measure">Which centre-forwards in the 2015/16 open-data sample had event profiles closest to Harry Kane?</p>
+            <div id="caseStats" class="stat-strip"></div>
           </div>
-
-          <label for="searchFilter">Player search</label>
-          <input id="searchFilter" type="search" placeholder="Search player" autocomplete="off" />
+          <div class="plate-number" aria-hidden="true"><span>09</span></div>
         </section>
 
-        <section class="control-section">
-          <h2>Players</h2>
-          <label for="playerSelect1">Player 1</label>
-          <select id="playerSelect1" class="player-select"></select>
-          <label for="playerSelect2">Player 2</label>
-          <select id="playerSelect2" class="player-select"></select>
-          <label for="playerSelect3">Player 3</label>
-          <select id="playerSelect3" class="player-select"></select>
-          <label for="playerSelect4">Player 4</label>
-          <select id="playerSelect4" class="player-select"></select>
-          <button id="resetPlayers" type="button">Reset players</button>
-        </section>
-
-        <section class="control-section">
-          <h2>Radar Metrics</h2>
-          <div id="metricCheckboxes" class="metric-list"></div>
-        </section>
-      </aside>
-
-      <main class="main">
-        <section class="summary-band">
+        <section class="case-panels">
           <div>
-            <span class="summary-label">Players</span>
-            <strong id="summaryPlayers">-</strong>
+            <div class="section-head">
+              <p class="eyebrow">Shortlist</p>
+              <h3>Closest weighted profiles</h3>
+            </div>
+            <div id="caseShortlist" class="shortlist-grid"></div>
           </div>
           <div>
-            <span class="summary-label">Competitions</span>
-            <strong id="summaryCompetitions">-</strong>
-          </div>
-          <div>
-            <span class="summary-label">Selected</span>
-            <strong id="summarySelected">-</strong>
-          </div>
-          <div>
-            <span class="summary-label">Radar scale</span>
-            <strong>Role percentile</strong>
+            <div class="section-head">
+              <p class="eyebrow">Profile gaps</p>
+              <h3>Candidate against Kane</h3>
+            </div>
+            <div id="caseDeltaTitle" class="delta-title"></div>
+            <div id="deltaHeatmap" class="delta-heatmap"></div>
           </div>
         </section>
 
-        <section class="chart-grid">
-          <div class="panel panel-large">
-            <div class="panel-header">
-              <div>
-                <h2>Player Profile Radar</h2>
-                <p>0-100 percentile within each player's dominant position group.</p>
+        <section class="validation-section">
+          <div class="section-head">
+            <p class="eyebrow">Method proof</p>
+            <h3>Stability and sensitivity</h3>
+          </div>
+          <div id="validationSummary" class="validation-grid"></div>
+        </section>
+
+        <section id="explorer" class="explorer-shell">
+          <aside class="rail" aria-label="Dashboard controls">
+            <section>
+              <h4>Role - pick on the pitch</h4>
+              <div id="pitchSelector"></div>
+              <div class="chip-row compact">
+                <button id="allRoles" class="chip" type="button">All roles</button>
+                <button id="otherRole" class="chip" type="button">Other</button>
               </div>
-            </div>
-            <div id="radarChart" class="chart"></div>
-          </div>
+              <p id="cohortNote" class="rail-note"></p>
+            </section>
 
-          <div class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>Raw Metric Comparison</h2>
-                <p>Direct values for the selected players.</p>
+            <section>
+              <h4>Competition</h4>
+              <div id="competitionChips" class="chip-row"></div>
+            </section>
+
+            <section>
+              <h4>Squad</h4>
+              <label for="teamFilter">Team</label>
+              <select id="teamFilter" class="input"></select>
+              <label for="searchFilter">Player search</label>
+              <input id="searchFilter" class="input" type="search" placeholder="Name contains" autocomplete="off" />
+              <label for="minutesFilter">Minimum minutes - <span id="minutesValue">900</span></label>
+              <input id="minutesFilter" type="range" min="0" max="3000" value="900" step="90" />
+            </section>
+
+            <section>
+              <h4>Profile metrics</h4>
+              <p class="rail-note"><span id="metricCount">0</span> on the radar. <button id="resetMetrics" class="inline-chip" type="button">Reset preset</button></p>
+              <div id="metricChips"></div>
+            </section>
+          </aside>
+
+          <div class="workbench">
+            <section>
+              <div class="section-head split">
+                <div>
+                  <p class="eyebrow">Compare tray</p>
+                  <h3>Pin up to four profiles</h3>
+                </div>
+                <button id="shareState" class="chip" type="button">Copy view link</button>
               </div>
-              <select id="barMetricSelect"></select>
-            </div>
-            <div id="barChart" class="chart small-chart"></div>
+              <div id="compareTray" class="compare-tray"></div>
+            </section>
+
+            <section class="viz-two">
+              <div>
+                <div class="section-head">
+                  <p class="eyebrow">Profile plate</p>
+                  <h3>Role percentile radar</h3>
+                </div>
+                <div id="radarChart" class="svg-wrap"></div>
+              </div>
+              <div>
+                <div class="section-head">
+                  <p class="eyebrow">Percentile strips</p>
+                  <h3>Raw value context</h3>
+                </div>
+                <div id="percentileStrips" class="strip-stack"></div>
+                <p id="invertedNote" class="rail-note"></p>
+              </div>
+            </section>
+
+            <section class="viz-two wide-left">
+              <div>
+                <div class="section-head split">
+                  <div>
+                    <p class="eyebrow">Landscape</p>
+                    <h3>Filtered cohort map</h3>
+                  </div>
+                  <div class="axis-controls">
+                    <label for="xMetric">Horizontal</label>
+                    <select id="xMetric" class="input"></select>
+                    <label for="yMetric">Vertical</label>
+                    <select id="yMetric" class="input"></select>
+                  </div>
+                </div>
+                <div id="scatterChart" class="svg-wrap"></div>
+              </div>
+              <div>
+                <div class="section-head">
+                  <p class="eyebrow">Nearest profiles</p>
+                  <h3>Browser-side similarity</h3>
+                </div>
+                <p id="nearestNote" class="rail-note"></p>
+                <div id="nearestProfiles" class="nearest-list"></div>
+              </div>
+            </section>
+
+            <section>
+              <div class="section-head split">
+                <div>
+                  <p class="eyebrow">Candidate ledger</p>
+                  <h3>Sortable player profiles</h3>
+                </div>
+                <span id="tableCount" class="rail-note"></span>
+              </div>
+              <div class="table-wrap">
+                <table id="candidateTable" class="table">
+                  <thead></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </section>
           </div>
         </section>
 
-        <section class="panel">
-          <div class="panel-header table-header">
-            <div>
-              <h2>Candidate Table</h2>
-              <p>Filtered player profiles with sortable raw metrics.</p>
-            </div>
-            <div id="tableCount" class="table-count">0 rows</div>
-          </div>
-          <div class="table-wrap">
-            <table id="candidateTable">
-              <thead></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="method-band">
-          <h2>Methodology Notes</h2>
-          <p>
-            Profiles are precomputed from StatsBomb Open Data. Radar values are role-aware percentiles, so players from different roles can be displayed together while each is benchmarked against his own dominant position group. Raw table values should still be interpreted with role context, because event opportunities vary heavily by position and team style.
-          </p>
+        <section id="method" class="method-band">
+          <p class="eyebrow">Method and limits</p>
+          <p>Profiles are precomputed from StatsBomb Open Data with exact lineup minutes, dominant position groups, per-90 event features, role-aware percentiles, robust-scaled similarity, bootstrap rank intervals, and feature-weight sensitivity checks.</p>
+          <p>Nearest profiles describe event-profile shape inside this historical sample. This is not a live transfer recommendation and does not include age, contract, wage, injury, scouting-video, or future-season information.</p>
+          <p class="source-line">Data: <a href="https://github.com/statsbomb/open-data">StatsBomb Open Data</a> | Pipeline: <a href="https://github.com/ELambden/football-recruitment-explorer">ELambden/football-recruitment-explorer</a></p>
         </section>
       </main>
     </div>
 
     <script>
-      window.DASHBOARD_DATA_PATH = "data/site-data.json";
+      window.DASHBOARD_PLAYERS_PATH = "data/players.json";
+      window.DASHBOARD_FALLBACK_DATA_PATH = "data/site-data.json";
       window.DASHBOARD_METRICS_PATH = "data/metrics.json";
-      window.DASHBOARD_ASSET_VERSION = "2026-09-02-all-position-v3";
+      window.DASHBOARD_CASE_STUDY_PATH = "data/case-study.json";
+      window.DASHBOARD_ASSET_VERSION = "2026-09-02-broadsheet-case-study";
     </script>
-    <script src="app.js?v=2026-09-02-all-position-v3"></script>
+    <script src="app.js?v=2026-09-02-broadsheet-case-study"></script>
   </body>
 </html>
