@@ -36,8 +36,6 @@ const state = {
   metrics: [],
   metricById: new Map(),
   rolePresets: {},
-  caseStudy: null,
-  caseCandidateId: null,
   role: "Centre Forward",
   competition: "All",
   team: "All",
@@ -52,13 +50,6 @@ const state = {
 };
 
 const els = {
-  caseTitle: document.getElementById("caseTitle"),
-  caseQuestion: document.getElementById("caseQuestion"),
-  caseStats: document.getElementById("caseStats"),
-  caseShortlist: document.getElementById("caseShortlist"),
-  caseDeltaTitle: document.getElementById("caseDeltaTitle"),
-  deltaHeatmap: document.getElementById("deltaHeatmap"),
-  validationSummary: document.getElementById("validationSummary"),
   pitchSelector: document.getElementById("pitchSelector"),
   allRoles: document.getElementById("allRoles"),
   otherRole: document.getElementById("otherRole"),
@@ -123,10 +114,6 @@ function normalizePlayers(payload) {
 
 function uniqueSorted(values) {
   return Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b));
-}
-
-function playerIdFromCase(player) {
-  return `${player.competitionName}|${player.seasonName}|${player.playerId}`;
 }
 
 function readHash() {
@@ -209,52 +196,6 @@ function metricDefs() {
   return state.metricIds.map((id) => state.metricById.get(id)).filter(Boolean).slice(0, 12);
 }
 
-function renderCaseStudy() {
-  const cs = state.caseStudy;
-  if (!cs) return;
-  const candidate = cs.candidates.find((c) => playerIdFromCase(c) === state.caseCandidateId) || cs.candidates[0];
-  state.caseCandidateId = playerIdFromCase(candidate);
-  els.caseTitle.textContent = cs.title;
-  els.caseQuestion.textContent = cs.question;
-  els.caseStats.innerHTML = [
-    ["Benchmark", cs.benchmark.playerName],
-    ["Cohort", `${cs.scope.cohortPlayers} CFs`],
-    ["Minutes filter", `${fmt(cs.scope.minMinutes, ".0f")}+`],
-    ["Role share", `${fmt(cs.scope.minPositionShare * 100, ".0f")}%+`],
-  ].map(([label, value]) => `<div class="stat"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
-
-  els.caseShortlist.innerHTML = cs.candidates.slice(0, 6).map((c) => {
-    const id = playerIdFromCase(c);
-    const interval = c.rankInterval && c.rankInterval.lower !== null ? `${fmt(c.rankInterval.lower, ".0f")}-${fmt(c.rankInterval.upper, ".0f")}` : "-";
-    return `<article class="candidate-card" data-id="${escapeHtml(id)}" data-on="${id === state.caseCandidateId ? "1" : "0"}">
-      <div class="card-top"><div><div class="card-title">${escapeHtml(c.playerName)}</div><div class="card-meta">${escapeHtml(c.teamName)} | ${escapeHtml(c.competitionName)}</div></div><div class="score">#${fmt(c.similarityRank, ".0f")}<br>${fmt(c.similarityPercentile, ".1f")}%</div></div>
-      <p class="card-meta">Rank interval ${escapeHtml(interval)} | ${escapeHtml(c.sensitivity.scenariosInTopN ?? "-")} scenarios in top 10</p>
-      <p>${escapeHtml(c.note)}</p>
-    </article>`;
-  }).join("");
-  els.caseShortlist.querySelectorAll(".candidate-card").forEach((el) => el.addEventListener("click", () => {
-    state.caseCandidateId = el.dataset.id;
-    if (!state.pinned.includes(el.dataset.id)) togglePin(el.dataset.id);
-    renderCaseStudy();
-  }));
-
-  els.caseDeltaTitle.textContent = `${candidate.playerName} vs ${cs.benchmark.playerName}`;
-  const maxAbs = Math.max(0.01, ...candidate.metricDeltas.map((d) => Math.abs(d.delta || 0)));
-  els.deltaHeatmap.innerHTML = candidate.metricDeltas.map((d) => {
-    const width = Math.max(2, Math.abs(d.delta || 0) / maxAbs * 50);
-    const left = (d.delta || 0) >= 0 ? 50 : 50 - width;
-    const cls = (d.delta || 0) < 0 ? "delta-bar negative" : "delta-bar";
-    return `<div class="delta-row"><span>${escapeHtml(d.label)}</span><span class="num">${fmt(d.candidateValue, ".2f")}</span><span class="delta-track"><span class="delta-zero"></span><span class="${cls}" style="left:${left}%;width:${width}%"></span></span></div>`;
-  }).join("");
-
-  const rel = cs.validation.splitHalfReliability.slice().sort((a, b) => (b.correlation || 0) - (a.correlation || 0)).slice(0, 6);
-  els.validationSummary.innerHTML = [
-    `<div class="validation-card"><div class="card-title">${cs.validation.bootstrapIterations}</div><div class="card-meta">bootstrap iterations for rank intervals</div></div>`,
-    `<div class="validation-card"><div class="card-title">${cs.validation.weightScenarios.length}</div><div class="card-meta">weight scenarios tested for shortlist stability</div></div>`,
-    `<div class="validation-card"><div class="card-title">${fmt(rel[0]?.correlation, ".2f")}</div><div class="card-meta">best split-half reliability: ${escapeHtml(rel[0]?.label || "-")}</div></div>`,
-  ].join("");
-}
-
 function renderPitch() {
   const counts = new Map();
   for (const p of state.players) {
@@ -318,7 +259,7 @@ function renderTray() {
     return `<div class="tray-item" style="--item-color:${ink.color}"><span class="swatch"></span><div><div class="tray-title" style="color:${ink.color}">${escapeHtml(p.n)}</div><div class="card-meta">${escapeHtml(p.t)} | ${escapeHtml(p.c)}</div><div class="card-meta num">${fmt(p.min, ".0f")} min | ${p.m} apps | ${fmt((p.sh || 0) * 100, ".0f")}% role share</div></div><button class="chip remove-pin" data-id="${escapeHtml(p.id)}" type="button">x</button></div>`;
   });
   if (players.length < 4) {
-    items.push(`<div class="tray-item" style="--item-color:var(--color-divider)"><span class="swatch"></span><div><div class="tray-title">Slot ${players.length + 1} open</div><div class="card-meta">Click a point, row, shortlist candidate, or nearest profile.</div></div></div>`);
+    items.push(`<div class="tray-item" style="--item-color:var(--color-divider)"><span class="swatch"></span><div><div class="tray-title">Slot ${players.length + 1} open</div><div class="card-meta">Click a point, row, or nearest profile.</div></div></div>`);
   }
   els.compareTray.innerHTML = items.join("");
   els.compareTray.querySelectorAll(".remove-pin").forEach((btn) => btn.addEventListener("click", (event) => { event.stopPropagation(); togglePin(btn.dataset.id); }));
@@ -367,6 +308,19 @@ function extent(values) {
   return [Math.max(0, lo - pad), hi + pad];
 }
 
+function niceValue(value, metric) {
+  const format = metric?.format || ".2f";
+  const digits = { ".3f": 3, ".2f": 2, ".1f": 1, ".0f": 0 }[format] ?? 2;
+  const abs = Math.abs(Number(value));
+  if (abs >= 100) return Number(value).toFixed(0);
+  if (abs >= 10 && digits > 1) return Number(value).toFixed(1);
+  return Number(value).toFixed(digits);
+}
+
+function metricShort(metric) {
+  return metric.shortLabel || metric.label;
+}
+
 function renderScatter() {
   const cohort = filteredPlayers();
   const selected = new Set(state.pinned);
@@ -374,15 +328,42 @@ function renderScatter() {
   const ym = state.metricById.get(state.yMetric) || state.metrics[1];
   const [x0, x1] = extent(cohort.map((p) => p.v[xm.id]));
   const [y0, y1] = extent(cohort.map((p) => p.v[ym.id]));
-  const sx = (v) => 62 + (((v ?? x0) - x0) / (x1 - x0)) * 540;
-  const sy = (v) => 382 - (((v ?? y0) - y0) / (y1 - y0)) * 368;
-  const ghosts = cohort.filter((p) => !selected.has(p.id)).map((p) => `<circle class="scatter-point" data-id="${escapeHtml(p.id)}" cx="${sx(p.v[xm.id]).toFixed(1)}" cy="${sy(p.v[ym.id]).toFixed(1)}" r="3.2" fill="rgba(32,30,29,.26)"><title>${escapeHtml(p.n)} | ${escapeHtml(p.t)}</title></circle>`).join("");
+  const left = 76, top = 28, width = 540, height = 368;
+  const right = left + width, bottom = top + height;
+  const sx = (v) => left + (((v ?? x0) - x0) / (x1 - x0)) * width;
+  const sy = (v) => bottom - (((v ?? y0) - y0) / (y1 - y0)) * height;
+  const tickFractions = [0, 0.25, 0.5, 0.75, 1];
+  const xTicks = tickFractions.map((f) => {
+    const x = left + f * width;
+    const value = x0 + f * (x1 - x0);
+    return `<line x1="${x.toFixed(1)}" y1="${top}" x2="${x.toFixed(1)}" y2="${bottom}" class="grid-line"></line><text x="${x.toFixed(1)}" y="${bottom + 18}" text-anchor="middle" class="axis-tick">${niceValue(value, xm)}</text>`;
+  }).join("");
+  const yTicks = tickFractions.map((f) => {
+    const y = bottom - f * height;
+    const value = y0 + f * (y1 - y0);
+    return `<line x1="${left}" y1="${y.toFixed(1)}" x2="${right}" y2="${y.toFixed(1)}" class="grid-line"></line><text x="${left - 10}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="axis-tick">${niceValue(value, ym)}</text>`;
+  }).join("");
+  const midpointX = sx(x0 + (x1 - x0) / 2);
+  const midpointY = sy(y0 + (y1 - y0) / 2);
+  const xLow = `Low ${metricShort(xm)}`;
+  const xHigh = `High ${metricShort(xm)}`;
+  const yLow = `Low ${metricShort(ym)}`;
+  const yHigh = `High ${metricShort(ym)}`;
+  const quadrantLabels = [
+    { x: left + 9, y: top + 16, anchor: "start", text: `${yHigh} / ${xLow}` },
+    { x: right - 9, y: top + 16, anchor: "end", text: `${yHigh} / ${xHigh}` },
+    { x: left + 9, y: bottom - 10, anchor: "start", text: `${yLow} / ${xLow}` },
+    { x: right - 9, y: bottom - 10, anchor: "end", text: `${yLow} / ${xHigh}` },
+  ].map((label) => `<text x="${label.x}" y="${label.y}" text-anchor="${label.anchor}" class="quadrant-label">${escapeHtml(label.text)}</text>`).join("");
+  const ghosts = cohort.filter((p) => !selected.has(p.id)).map((p) => `<circle class="scatter-point" data-id="${escapeHtml(p.id)}" cx="${sx(p.v[xm.id]).toFixed(1)}" cy="${sy(p.v[ym.id]).toFixed(1)}" r="3.2" fill="rgba(32,30,29,.26)"><title>${escapeHtml(p.n)} | ${escapeHtml(p.t)} | ${metricShort(xm)} ${fmt(p.v[xm.id], xm.format)} | ${metricShort(ym)} ${fmt(p.v[ym.id], ym.format)}</title></circle>`).join("");
   const pins = selectedPlayers().map((p, i) => {
     const ink = INKS[i % INKS.length];
     const x = sx(p.v[xm.id]), y = sy(p.v[ym.id]);
-    return `<g><circle class="scatter-point" data-id="${escapeHtml(p.id)}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7.5" fill="${ink.fill}" stroke="${ink.color}" stroke-width="1.7"></circle><text x="${(x + 12).toFixed(1)}" y="${(y + 4).toFixed(1)}" font-size="12" font-weight="600" fill="${ink.color}" style="paint-order:stroke;stroke:var(--color-bg);stroke-width:3.5px">${escapeHtml(p.n)}</text></g>`;
+    const labelAnchor = x > right - 120 ? "end" : "start";
+    const labelX = labelAnchor === "end" ? x - 12 : x + 12;
+    return `<g><circle class="scatter-point" data-id="${escapeHtml(p.id)}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7.5" fill="${ink.fill}" stroke="${ink.color}" stroke-width="1.7"><title>${escapeHtml(p.n)} | ${escapeHtml(p.t)} | ${metricShort(xm)} ${fmt(p.v[xm.id], xm.format)} | ${metricShort(ym)} ${fmt(p.v[ym.id], ym.format)}</title></circle><text x="${labelX.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="${labelAnchor}" font-size="12" font-weight="600" fill="${ink.color}" style="paint-order:stroke;stroke:var(--color-bg);stroke-width:3.5px">${escapeHtml(p.n)}</text></g>`;
   }).join("");
-  els.scatterChart.innerHTML = `<svg viewBox="0 0 620 440" aria-label="Filtered cohort scatter"><rect x="62" y="14" width="540" height="368" fill="color-mix(in srgb, var(--color-text) 3%, transparent)"></rect><line x1="62" y1="382" x2="602" y2="382" stroke="var(--color-text)"></line><line x1="62" y1="14" x2="62" y2="382" stroke="var(--color-text)"></line>${ghosts}<g style="mix-blend-mode:multiply">${pins}</g><text x="602" y="424" text-anchor="end" font-size="12" font-weight="600">${escapeHtml(xm.label)} -></text><text x="14" y="14" transform="rotate(-90 14 14)" text-anchor="end" font-size="12" font-weight="600">${escapeHtml(ym.label)} -></text></svg>`;
+  els.scatterChart.innerHTML = `<svg viewBox="0 0 660 470" aria-label="Filtered cohort scatter"><rect x="${left}" y="${top}" width="${width}" height="${height}" fill="color-mix(in srgb, var(--color-text) 3%, transparent)"></rect>${xTicks}${yTicks}<line x1="${midpointX.toFixed(1)}" y1="${top}" x2="${midpointX.toFixed(1)}" y2="${bottom}" class="median-line"></line><line x1="${left}" y1="${midpointY.toFixed(1)}" x2="${right}" y2="${midpointY.toFixed(1)}" class="median-line"></line>${quadrantLabels}<line x1="${left}" y1="${bottom}" x2="${right}" y2="${bottom}" stroke="var(--color-text)"></line><line x1="${left}" y1="${top}" x2="${left}" y2="${bottom}" stroke="var(--color-text)"></line>${ghosts}<g style="mix-blend-mode:multiply">${pins}</g><text x="${right}" y="${bottom + 48}" text-anchor="end" font-size="12" font-weight="600">${escapeHtml(xm.label)} -></text><text x="18" y="${top}" transform="rotate(-90 18 ${top})" text-anchor="end" font-size="12" font-weight="600">${escapeHtml(ym.label)} -></text></svg>`;
   els.scatterChart.querySelectorAll(".scatter-point").forEach((el) => el.addEventListener("click", () => togglePin(el.dataset.id)));
 }
 
@@ -444,7 +425,6 @@ function renderTable() {
 
 function render() {
   if (!state.ready) return;
-  renderCaseStudy();
   renderPitch();
   renderControls();
   renderTray();
@@ -480,10 +460,9 @@ async function fetchJson(path) {
 }
 
 async function init() {
-  const [playersPayload, metricsPayload, casePayload] = await Promise.all([
+  const [playersPayload, metricsPayload] = await Promise.all([
     fetchJson(window.DASHBOARD_PLAYERS_PATH).catch(() => fetchJson(window.DASHBOARD_FALLBACK_DATA_PATH)),
     fetchJson(window.DASHBOARD_METRICS_PATH),
-    fetchJson(window.DASHBOARD_CASE_STUDY_PATH).catch(() => null),
   ]);
   state.players = normalizePlayers(playersPayload);
   state.metrics = metricsPayload.metricDefinitions;
@@ -491,11 +470,6 @@ async function init() {
   state.rolePresets = metricsPayload.rolePresets;
   state.metricIds = metricsPayload.defaultMetricIds.slice();
   state.role = metricsPayload.defaultRole;
-  state.caseStudy = casePayload;
-  if (casePayload?.candidates?.length) {
-    state.caseCandidateId = playerIdFromCase(casePayload.candidates[0]);
-    state.pinned = [playerIdFromCase(casePayload.benchmark), ...casePayload.candidates.slice(0, 2).map(playerIdFromCase)];
-  }
   readHash();
   if (!state.pinned.length) pickDefaults();
   state.ready = true;

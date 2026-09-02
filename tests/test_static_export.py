@@ -82,3 +82,15 @@ def test_build_players_data_is_compact_dashboard_contract() -> None:
     assert set(player) == {"id", "n", "t", "c", "g", "sh", "min", "m", "st", "v", "p"}
     assert set(player["v"]) == {metric["id"] for metric in METRIC_DEFINITIONS}
     assert set(player["p"]) == {metric["id"] for metric in METRIC_DEFINITIONS}
+
+
+def test_docs_dashboard_is_explorer_first_without_case_study() -> None:
+    docs = Path("docs")
+    html = (docs / "index.html").read_text(encoding="utf-8")
+    app_js = (docs / "app.js").read_text(encoding="utf-8")
+
+    assert "#case-study" not in html
+    assert "DASHBOARD_CASE_STUDY_PATH" not in html
+    assert "renderCaseStudy" not in app_js
+    assert "quadrant-label" in app_js
+    assert "axis-tick" in app_js

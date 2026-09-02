@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Football Recruitment Explorer</title>
-    <link rel="stylesheet" href="styles.css?v=2026-09-02-broadsheet-case-study" />
+    <link rel="stylesheet" href="styles.css?v=2026-09-02-explorer-landscape" />
   </head>
   <body>
     <div class="page-shell">
@@ -16,51 +16,14 @@
         </div>
         <div class="rule-light"></div>
         <h1>Football Recruitment Explorer</h1>
-        <p class="standfirst">A recruitment case study and interactive profile workbench built from event data, exact lineup minutes, role-aware percentiles, similarity modelling, and validation checks.</p>
+        <p class="standfirst">An interactive football profile workbench built from StatsBomb event data, exact lineup minutes, role-aware percentiles, and browser-side similarity.</p>
         <nav class="jump-nav" aria-label="Page sections">
-          <a href="#case-study">Case study</a>
           <a href="#explorer">Explorer</a>
           <a href="#method">Method</a>
         </nav>
       </header>
 
       <main>
-        <section id="case-study" class="case-grid" aria-label="Recruitment case study">
-          <div class="case-lead">
-            <p class="eyebrow">Recruitment case file</p>
-            <h2 id="caseTitle">Harry Kane 2015/16 Centre-Forward Shortlist</h2>
-            <p id="caseQuestion" class="muted measure">Which centre-forwards in the 2015/16 open-data sample had event profiles closest to Harry Kane?</p>
-            <div id="caseStats" class="stat-strip"></div>
-          </div>
-          <div class="plate-number" aria-hidden="true"><span>09</span></div>
-        </section>
-
-        <section class="case-panels">
-          <div>
-            <div class="section-head">
-              <p class="eyebrow">Shortlist</p>
-              <h3>Closest weighted profiles</h3>
-            </div>
-            <div id="caseShortlist" class="shortlist-grid"></div>
-          </div>
-          <div>
-            <div class="section-head">
-              <p class="eyebrow">Profile gaps</p>
-              <h3>Candidate against Kane</h3>
-            </div>
-            <div id="caseDeltaTitle" class="delta-title"></div>
-            <div id="deltaHeatmap" class="delta-heatmap"></div>
-          </div>
-        </section>
-
-        <section class="validation-section">
-          <div class="section-head">
-            <p class="eyebrow">Method proof</p>
-            <h3>Stability and sensitivity</h3>
-          </div>
-          <div id="validationSummary" class="validation-grid"></div>
-        </section>
-
         <section id="explorer" class="explorer-shell">
           <aside class="rail" aria-label="Dashboard controls">
             <section>
@@ -171,7 +134,7 @@
 
         <section id="method" class="method-band">
           <p class="eyebrow">Method and limits</p>
-          <p>Profiles are precomputed from StatsBomb Open Data with exact lineup minutes, dominant position groups, per-90 event features, role-aware percentiles, robust-scaled similarity, bootstrap rank intervals, and feature-weight sensitivity checks.</p>
+          <p>Profiles are precomputed from StatsBomb Open Data with exact lineup minutes, dominant position groups, per-90 event features, and role-aware percentiles.</p>
           <p>Nearest profiles describe event-profile shape inside this historical sample. This is not a live transfer recommendation and does not include age, contract, wage, injury, scouting-video, or future-season information.</p>
           <p class="source-line">Data: <a href="https://github.com/statsbomb/open-data">StatsBomb Open Data</a> | Pipeline: <a href="https://github.com/ELambden/football-recruitment-explorer">ELambden/football-recruitment-explorer</a></p>
         </section>
@@ -182,9 +145,8 @@
       window.DASHBOARD_PLAYERS_PATH = "data/players.json";
       window.DASHBOARD_FALLBACK_DATA_PATH = "data/site-data.json";
       window.DASHBOARD_METRICS_PATH = "data/metrics.json";
-      window.DASHBOARD_CASE_STUDY_PATH = "data/case-study.json";
-      window.DASHBOARD_ASSET_VERSION = "2026-09-02-broadsheet-case-study";
+      window.DASHBOARD_ASSET_VERSION = "2026-09-02-explorer-landscape";
     </script>
-    <script src="app.js?v=2026-09-02-broadsheet-case-study"></script>
+    <script src="app.js?v=2026-09-02-explorer-landscape"></script>
   </body>
 </html>
